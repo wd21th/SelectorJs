@@ -28,7 +28,6 @@ Open up VS Code and input hotkey Ctrl+Shift+X. Search Selector Js. Choose and In
 ##0.0.1
 
 - Selection with nesting
-- Selection all with nesting
 - Selection without nesting
 - Selection all without nesting
-- Select and get full ways to declare varable
+
