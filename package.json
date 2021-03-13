@@ -1,0 +1,79 @@
+{
+	"name": "selector-js",
+	"displayName": "Selector Js",
+	"description": "Transfers html tags to javascript varable",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.54.0"
+	},
+	"publisher": "wprogrammist",
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:selectorjs.select_with_nesting",
+		"onCommand:selectorjs.select_all_with_nesting",
+		"onCommand:selectorjs.select_without_nesting",
+		"onCommand:selectorjs.select_all_without_nesting"
+	],
+	"main": "./extension.js",
+	"icon": "images/icon.JPG",
+	"author": {
+		"name": "Dias Bakashbay"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wd21th/SelectorJs.git"
+	},
+	"keywords": [
+		"Selector",
+		"Snippet",
+		"Html",
+		"javascript",
+		"Js"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "selectorjs.select_with_nesting",
+				"category": "Selector Js",
+				"title": "Select with nesting"
+			},
+			{
+				"command": "selectorjs.select_all_without_nesting",
+				"category": "SelectorJs",
+				"title": "Select all with nesting"
+			},
+			{
+				"command": "selectorjs.select_without_nesting",
+				"category": "Selector Js",
+				"title": "Select without nesting"
+			},
+			{
+				"command": "selectorjs.select_all_without_nesting",
+				"category": "Selector Js",
+				"title": "Select all without nesting"
+			}
+		]
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "node ./test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.54.0",
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.0.4",
+		"@types/node": "^12.11.7",
+		"eslint": "^7.19.0",
+		"glob": "^7.1.6",
+		"mocha": "^8.2.1",
+		"typescript": "^4.1.3",
+		"vscode-test": "^1.5.0"
+	},
+	"dependencies": {
+		"copy-paste": "^1.3.0",
+		"node-html-parser": "^3.0.4"
+	}
+}
