@@ -8,7 +8,7 @@ Open any document contain HTML and do one of the following:
 
 Selection with nesting
 
-![Functional Demo](images/selection_with_nesting.gif)
+![Functional Demo](https://github.com/wd21th/SelectorJs/images/selection_with_nesting.gif)
 
 Selection without nesting
 
