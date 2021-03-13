@@ -12,11 +12,11 @@ Selection with nesting
 
 Selection without nesting
 
-![Functional Demo](images/selection_without_nesting.gif)
+![selection_without _nesting](https://user-images.githubusercontent.com/67710731/111050968-fa4a1380-8479-11eb-86bc-0d0e455330d7.gif)
 
 Selection all without nesting
 
-![Functional Demo](images/selection_all_without_nesting.gif)
+![selection_all _without _nesting](https://user-images.githubusercontent.com/67710731/111050981-0cc44d00-847a-11eb-9678-676b98af9cad.gif)
 
 
 # Install
