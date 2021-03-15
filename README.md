@@ -6,18 +6,12 @@ Works as eCSSTractor. You just select html tags and run command. Then text will 
 Open any document contain HTML and do one of the following:
 - Press **Cmd+Shift+P** on Mac OS X or **Ctrl+Shift+P** on Windows/Linux to launch command palette and choose:
 
-Selection with nesting
+Query Selector
 
-![selection_with _nesting](https://user-images.githubusercontent.com/67710731/111050947-d4247380-8479-11eb-9570-0f7e0deb4366.gif)
+![qs](https://user-images.githubusercontent.com/67710731/111110820-6bc3b800-8587-11eb-963b-55f576c6761d.gif)
 
-Selection without nesting
-
-![selection_without _nesting](https://user-images.githubusercontent.com/67710731/111050968-fa4a1380-8479-11eb-86bc-0d0e455330d7.gif)
-
-Selection all without nesting
-
-![selection_all _without _nesting](https://user-images.githubusercontent.com/67710731/111050981-0cc44d00-847a-11eb-9678-676b98af9cad.gif)
-
+Query Selector All
+![qsa](https://user-images.githubusercontent.com/67710731/111111993-8e56d080-8589-11eb-9638-fa43a3beed1b.gif)
 
 # Install
 
@@ -31,3 +25,7 @@ Open up VS Code and input hotkey Ctrl+Shift+X. Search Selector Js. Choose and In
 - Selection without nesting
 - Selection all without nesting
 
+##0.0.2
+
+- querySelector
+- querySelectorAll
