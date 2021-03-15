@@ -11,6 +11,7 @@ Query Selector
 ![qs](https://user-images.githubusercontent.com/67710731/111110820-6bc3b800-8587-11eb-963b-55f576c6761d.gif)
 
 Query Selector All
+
 ![qsa](https://user-images.githubusercontent.com/67710731/111111993-8e56d080-8589-11eb-9638-fa43a3beed1b.gif)
 
 # Install
