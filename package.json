@@ -2,28 +2,26 @@
 	"name": "selector-js",
 	"displayName": "Selector Js",
 	"description": "Transfers html tags to javascript varable",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.54.0"
 	},
-	"publisher": "wprogrammist",
+	"publisher": "DiasBakahbay",
 	"categories": [
 		"Other"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wd21th/SelectorJs.git"
+	},
 	"activationEvents": [
-		"onCommand:selectorjs.select_with_nesting",
-		"onCommand:selectorjs.select_all_with_nesting",
-		"onCommand:selectorjs.select_without_nesting",
-		"onCommand:selectorjs.select_all_without_nesting"
+		"onCommand:selectorjs.qs",
+		"onCommand:selectorjs.qsa"
 	],
 	"main": "./extension.js",
 	"icon": "images/icon.JPG",
 	"author": {
 		"name": "Dias Bakashbay"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/wd21th/SelectorJs.git"
 	},
 	"keywords": [
 		"Selector",
@@ -35,24 +33,14 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "selectorjs.select_with_nesting",
+				"command": "selectorjs.qs",
 				"category": "Selector Js",
-				"title": "Select with nesting"
+				"title": "query Selector"
 			},
 			{
-				"command": "selectorjs.select_all_without_nesting",
-				"category": "SelectorJs",
-				"title": "Select all with nesting"
-			},
-			{
-				"command": "selectorjs.select_without_nesting",
+				"command": "selectorjs.qsa",
 				"category": "Selector Js",
-				"title": "Select without nesting"
-			},
-			{
-				"command": "selectorjs.select_all_without_nesting",
-				"category": "Selector Js",
-				"title": "Select all without nesting"
+				"title": "query Selector All"
 			}
 		]
 	},
