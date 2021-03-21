@@ -14,6 +14,11 @@ Query Selector All
 
 ![qsa](https://user-images.githubusercontent.com/67710731/111111993-8e56d080-8589-11eb-9638-fa43a3beed1b.gif)
 
+Query selector with event
+
+![select_with_event](https://user-images.githubusercontent.com/67710731/111893320-293d2800-8a2c-11eb-94a2-ada8041506da.gif)
+
+
 # Install
 
 Open up VS Code and input hotkey Ctrl+Shift+X. Search Selector Js. Choose and Install Then reload window
@@ -30,3 +35,8 @@ Open up VS Code and input hotkey Ctrl+Shift+X. Search Selector Js. Choose and In
 
 - querySelector
 - querySelectorAll
+
+##0.0.3
+
+- Fixed some bags
+- Add new function - Query selector with event
