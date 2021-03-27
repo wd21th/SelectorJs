@@ -1,46 +1,81 @@
 {
 	"name": "selector-js",
 	"displayName": "Selector Js",
-	"description": "Transfers html tags to javascript varable",
-	"version": "0.0.2",
+	"description": "transfers Html elements to JavaScript variables",
+	"version": "0.0.4",
 	"engines": {
 		"vscode": "^1.54.0"
 	},
-	"publisher": "DiasBakahbay",
 	"categories": [
 		"Other"
 	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/wd21th/SelectorJs.git"
-	},
-	"activationEvents": [
-		"onCommand:selectorjs.qs",
-		"onCommand:selectorjs.qsa"
-	],
-	"main": "./extension.js",
+	"publisher": "DiasBakahbay",
 	"icon": "images/icon.JPG",
 	"author": {
 		"name": "Dias Bakashbay"
 	},
 	"keywords": [
 		"Selector",
+		"Selector JS",
 		"Snippet",
 		"Html",
+		"css",
 		"javascript",
-		"Js"
+		"Js",
+		"autocomplete",
+		"auto",
+		"query"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wd21th/SelectorJs.git"
+	},
+	"activationEvents": [
+		"onCommand:selector-js.ce",
+		"onCommand:selector-js.qsby",
+		"onCommand:selector-js.qsaby",
+		"onCommand:selector-js.qswd",
+		"onCommand:selector-js.qs",
+		"onCommand:selector-js.qsa",
+		"onCommand:selector-js.qswe"
+	],
+	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "selectorjs.qs",
+				"command": "selector-js.ce",
 				"category": "Selector Js",
-				"title": "query Selector"
+				"title": "Create Element (convert)"
 			},
 			{
-				"command": "selectorjs.qsa",
+				"command": "selector-js.qsby",
 				"category": "Selector Js",
-				"title": "query Selector All"
+				"title": "Selector by ..."
+			},
+			{
+				"command": "selector-js.qsaby",
+				"category": "Selector Js",
+				"title": "Selector all by ..."
+			},
+			{
+				"command": "selector-js.qswd",
+				"category": "Selector Js",
+				"title": "Selector with details"
+			},
+			{
+				"command": "selector-js.qs",
+				"category": "Selector Js",
+				"title": "Query selector"
+			},
+			{
+				"command": "selector-js.qsa",
+				"category": "Selector Js",
+				"title": "Query selector all"
+			},
+			{
+				"command": "selector-js.qswe",
+				"category": "Selector Js",
+				"title": "Selector with event"
 			}
 		]
 	},
