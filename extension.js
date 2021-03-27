@@ -1,782 +1,1052 @@
-// =====================================================
-// Необходимые модули
 const vscode = require('vscode');
 const ncp = require("copy-paste");
 var HTMLParser = require('node-html-parser');
-// =====================================================
+
 /**
 * @param {vscode.ExtensionContext} context
 */
+
 function activate (context) {
-	
-	// =====================================================
-	class htmlElement {
-		constructor(tagName, tabSize, attrs, nestingLevel) {
-			this.tagName = tagName
-			this.tabSize = tabSize
-			this.attrs = attrs
-			this.nestingLevel = nestingLevel
-		}
-	}
-	// ====================================================
-	
-	
-	const contentBetween = /(?<=>)([\s\S]+?)(?=<)/g
-	
-	
-	const matchTypeAttr = new RegExp(/type=/)
-	
-	
-	const matchNameAttr = new RegExp(/name=/)
-	
-	const matchIdAttr = new RegExp(/id=/)
-	
-	const matchClassAttr = new RegExp(/class=/)
-	
-	const matchValueAttr = new RegExp(/value=/)
-	
-	
-	const matchAccesskeyAttr = new RegExp(/accesskey=/)
-	
-	
-	const matchForAttr = new RegExp(/for=/)
-	
-	// =====================================================
-	
-	function haveType (string) {
-		if (string.match(matchTypeAttr)) {
-			return true
-		} else {
-			return false
-		}
-	}
-	function haveName (string) {
-		if (string.match(matchNameAttr)) {
-			return true
-		} else {
-			return false
-		}
-	}
-	function haveId (string) {
-		if (string.match(matchIdAttr) && string.match(/(?<=id=")(.+)(?=")/g)) {
-			if (string.match(/(?<=id=")(.+)(?=")/g)[0].trim() != '') {
-				return true
-			} else {
-				return false;
-			}
-		} else {
-			return false
-		}
-	}
-	
-	function haveClass (string) {
-		if (string.match(matchClassAttr)) {
-			if (string.match(/(?<=class=")(.+)(?=")/g)[0].trim() != '') {
-				return true
-			} else {
-				return false;
-			}
-		} else {
-			return false
-		}
-	}
-	
-	function haveValue (string) {
-		if (string.match(matchValueAttr)) {
-			return true
-		} else {
-			return false
-		}
-	}
-	function haveAccesskey (string) {
-		if (string.match(matchAccesskeyAttr)) {
-			return true
-		} else {
-			return false
-		}
-	}
-	function haveFor (string) {
-		if (string.match(matchForAttr)) {
-			return true
-		} else {
-			return false
-		}
-	}
-	
-	function haveAttributes (string) {
-		if (haveType(string) || haveName(string) || haveId(string) || haveValue(string) || haveAccesskey(string) || haveFor(string)) {
-			return true
-		} else {
-			return false;
-		}
-		
-	}
-	
-	function haveParent (htmlElements) {
-		if (htmlElements) {
-			// first element 
-			let openTag = htmlElements[0].match(/(?<=<)([a-z\d]+)(?=[\s\S]+)/g)[0]
-			// last element 
-			var lastEl = htmlElements.length - 1;
-			let closeTag = htmlElements[lastEl].match(/(?<=<)([a-z\d]+)(?=>)/g)[0]
-			// Если имя открывающего тега и закрывающего тега равно то они вложены
-			if (openTag == closeTag) {
-				
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-	
-	function remRepEl (arr) {
-		for (var i = arr.length - 1; i >= 0; i--) {
-			if (arr.indexOf(arr[i]) != i)
-			arr.splice(i, 1);
-		}
-	}
-	
-	function querySelector (item, declarations, qs) {
-		
-		if (qs == 'single') {
-			
-			if (item.tagName == 'input' || item.tagName == 'label' || item.tagName == 'button' && item.attrs.trim() != '') {
-				switch (item.tagName) {
-					case 'input':
-					if (haveId(item.attrs)) {
-						let idValue = item.attrs.match(/(?<=id=\")([a-z\d-_]+)(?=\")/g)[0]
+    
+    
+    class parentElement {
+        constructor(tagName, attrsObj) {
+            this.tagName = tagName
+            this.attrs = attrsObj
+        }
+        
+    }
+    
+    class htmlElement {
+        constructor(tagName, tabSize, attrsObj, nestingLevel, parentEl) {
+            this.tagName = tagName
+            this.tabSize = tabSize
+            this.attrs = attrsObj
+            this.nestingLevel = nestingLevel
+            this.parentEl = parentEl
+        }
+    }
+    
+    function tabPlus (nestingLevel, tabs) {
+        var tab = '    '
+        for (let i = 0; i < nestingLevel; i++) {
+            tabs += tab
+        }
+        return tabs;
+    }
+    
+    function setAttributes (attrs, attrsObj) {
+        for (let i = 0; i < attrs.match(/([a-zA-Z\d-_]+)(?==)/g).length; i++) {
+            // attrs[attributeName] = value
+            var
+                attributeName = attrs.match(/([a-zA-Z\d-_]+)(?==)/g)[i],
+                attributeValue = attrs.match(/".+?"/g)[i];
+            
+            attrsObj[attributeName] = attributeValue
+        }
+    }
+    
+    
+    function nesting (htmlEl, arr, nestingLevel, parent) {
+        
+        if (htmlEl.childNodes == 0) {
+            var
+                tagName = htmlEl.rawTagName
+            attrs = htmlEl.rawAttrs,
+                attrsObj = {},
+                tabs = '';
+            if (attrs != '') {
+                setAttributes(attrs, attrsObj)
+            }
+            // setAttributes(attrs, attrsObj)
+            // tabs = tabPlus(nestingLevel,tabs)
+            if (parent) {
+                var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent)
+                
+                arr.push(tag)
+            } else {
+                
+                var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel)
+                
+                arr.push(tag)
+            }
+            
+            
+            
+        } else {
+            
+            var
+                tagName = htmlEl.rawTagName
+            attrs = htmlEl.rawAttrs,
+                attrsObj = {},
+                tabs = '';
+            if (attrs != '') {
+                setAttributes(attrs, attrsObj)
+            }
+            // tabPlus(nestingLevel,tabs)
+            
+            if (parent) {
+                var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent)
+                
+                arr.push(tag)
+                
+                
+                let parentEl = new parentElement(tagName, attrsObj);
+                nestingLevel++
+                for (let i = 0; i < htmlEl.childNodes.length; i++) {
+                    nesting(htmlEl.childNodes[i], arr, nestingLevel, parentEl)
+                }
+                
+                
+            } else {
+                var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent)
+                arr.push(tag)
+                let parentEl = new parentElement(tagName, attrsObj)
+                nestingLevel++
+                for (let i = 0; i < htmlEl.childNodes.length; i++) {
+                    nesting(htmlEl.childNodes[i], arr, nestingLevel, parentEl)
+                }
+            }
+            
+            
+            
+        }
+        
+    }
+    
+    function checkIdVarName (idValue) {
+        
+        // Select without quotes
+        let varableName = idValue.replace(/"/g, '')
+        // =====================================================
+        // If idValue beifin with numbers
+        if (varableName.match(/^\d+/m)) {
+            const lengthOfDigits = varableName.match(/^\d+/m)[0].length
+            varableName = varableName.substring(lengthOfDigits)
+        }
+        // =====================================================
+        // If idValue separated with -
+        if (varableName.match(/-/g)) {
+            varableName = varableName.split("-")
+            for (let j = 1; j < varableName.length; j++) {
+                varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
+            }
+            varableName = varableName.join('')
+        }
+        return varableName;
+
+    }
+    
+    function checkClassVarName (classValue) {
+        
+        classValue = classValue.replace(/"/g, '')
+
+        if (classValue.match(/\s/g)) {
+            var classes = classValue.split(" ")
+    
+            classes.filter(element => element != '')
+    
+            classValue = classes[0]
+            // console.log(classValue);
+        }
+
+
+        let varableName = classValue
+        if (varableName.match(/^\d+/m)) {
+            const lengthOfDigits = varableName.match(/^\d+/m)[0].length
+            varableName = varableName.substring(lengthOfDigits)
+        }
+        // console.log(varableName);
+
+        if (varableName.match(/-/g)) {
+            varableName = varableName.split("-")
+    
+            varableName.filter(element => element != '')
+    
+            for (let j = 1; j < varableName.length; j++) {
+                varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
+            }
+            varableName = varableName.join('')
+        }
+
+        return varableName;
+
+    }
+
+    function buttonCorrect(item, arr) {
+        let keys = Object.keys(item.attrs)
+        if (keys.includes('id')) {
+    var varableName = checkIdVarName(item.attrs['id'])
+    var btnId = item.attrs['id'].replace(/"/g, '')
+    
+var varable = `btn${varableName} = document.querySelector('${item.tagName}#${btnId}')`
+                            arr.push(varable)
+
+
+        }else if (keys.includes('type')) {
+var varableName = checkIdVarName(item.attrs['type'])
+var btnType = item.attrs['type']
+    
+var varable = `btn${varableName} = document.querySelector('${item.tagName}[type="${btnType}"]')`
+arr.push(varable)
+            
+        }else if(keys.includes('value')) {
+var varableName = checkIdVarName(item.attrs['value'])
+var btnValue = item.attrs['value']
+    
+var varable = `btn${varableName} = document.querySelector('${item.tagName}[value="${btnValue}"]')`
+arr.push(varable)
+                        
+                } else if(keys.includes('name')) {
+                
+var varableName = checkIdVarName(item.attrs['name'])
+var btnName = item.attrs['name']
+    
+var varable = `btn${varableName} = document.querySelector('${item.tagName}[name="${btnName}"]')`
+arr.push(varable)
+                                    
+            }else {
+                var varable = `btn = document.querySelector('${item.tagName}')`
+                            arr.push(varable)
+            }
+
+    }
+    
+    function qs (item, arr) {
+        let keys = Object.keys(item.attrs)
+        if(keys.includes('id')) {
+            let varableName = checkIdVarName(item.attrs['id'])
+let id = item.attrs['id'].replace(/\"/g, '')
+let varable = `${varableName} = document.getElementById('${id}')`
+arr.push(varable)
+        }else if(keys.includes('class')) {
+            let varableName = checkClassVarName(item.attrs['class'])
+let classV = item.attrs['class'].replace(/\"/g, '')
+let varable = `${varableName} = document.querySelector('.${classV}')`
+arr.push(varable)
+        }else {
+            let varable = `${item.tagName} = document.querySelector('${item.tagName}')`
+            arr.push(varable)
+        }
+    }
+// =====================================================
+
+
+    function buttonAllCorrect(item, arr) {
+        
+        let keys = Object.keys(item.attrs)
+        if (keys.includes('id')) {
+    var varableName = checkIdVarName(item.attrs['id'])
+    var btnId = item.attrs['id'].replace(/"/g, '')
+    
+var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}#${btnId}')`
+                            arr.push(varable)
+
+
+        }else if (keys.includes('type')) {
+var varableName = checkIdVarName(item.attrs['type'])
+var btnType = item.attrs['type']
+    
+var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[type="${btnType}"]')`
+arr.push(varable)
+            
+        }else if(keys.includes('value')) {
+var varableName = checkIdVarName(item.attrs['value'])
+var btnValue = item.attrs['value']
+    
+var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[value="${btnValue}"]')`
+arr.push(varable)
+                        
+                } else if(keys.includes('name')) {
+                
+var varableName = checkIdVarName(item.attrs['name'])
+var btnName = item.attrs['name']
+    
+var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[name="${btnName}"]')`
+arr.push(varable)
+                                    
+            }else {
+                var varable = `btns = document.getElementsByTagName('${item.tagName}')`
+                            arr.push(varable)
+            }
+
+    
+    }
+
+
+    function qsa(item, arr) {
+        let keys = Object.keys(item.attrs)
+        if(keys.includes('id')) {
+            let varableName = checkIdVarName(item.attrs['id'])
+let id = item.attrs['id'].replace(/\"/g, '')
+let varable = `${varableName}s = document.querySelectorAll('#${id}')`
+arr.push(varable)
+        }else if(keys.includes('class')) {
+            let varableName = checkClassVarName(item.attrs['class'])
+let classV = item.attrs['class'].replace(/\"/g, '')
+let varable = `${varableName}s = document.getElementsByClassName('${classV}')`
+arr.push(varable)
+        }else if(keys.includes('name')) {
+            
+            let varableName = checkIdVarName(item.attrs['id'])
+let name = item.attrs['name'].replace(/\"/g, '')
+let varable = `${varableName}s = document.getElementsByName('${name}')`
+arr.push(varable)
+        
+        } else {
+            let varable = `${item.tagName}s = document.getElementsByTagName('${item.tagName}')`
+            arr.push(varable)
+        }
+    }
+
+
+
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('selector-js.ce', function () {
+            let htmlObjs = []
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                
+                // =====================================================
+                const document = editor.document;
+                const selection = editor.selection;
+                let html = document.getText(selection);
+                // =====================================================
+                html = html.match(/<.+?>/g).join('')
+                var root = HTMLParser.parse(html)
+                // =====================================================
+                root.childNodes.forEach((item) => {
+                    
+                    nesting(item, htmlObjs, 0, null)
+                    
+                });
+                
+                let createElement = []
+                htmlObjs.forEach((item) => {
+                    createElement.push(`const ${item.tagName} = document.createElement('${item.tagName}')`)
+                    // setAttribute("${key}",${item.attrs[key]})`)
+                    for (const key in item.attrs) {
+                        if (key == 'class') {
+                            if (item.attrs[key].match(/\s/g)) {
+                                
+                                var classes = item.attrs[key].replace(/"/g, '').split(" ")
+                                for (let i = 0; i < classes.length; i++) {
+                                    createElement.push(`${item.tagName}.classList.add("${classes[i]}")`)
+                                }
+                            } else {
+                                createElement.push(`${item.tagName}.classList.add("${item.attrs[key].replace(/"/g, '')}")`)
+                            }
+                            
+                        } else {
+                            createElement.push(`${item.tagName}.setAttribute("${key}",${item.attrs[key]})`)
+                            
+                        }
+                    }
+                    
+                    if (item.parentEl) {
+                        /* for (const key in item.parent.attrs) {
+                            
+                        } */
+                        var keys = Object.keys(item.parentEl.attrs)
+                        
+                        if (keys.includes('id')) {
+                            createElement.push(`document.querySelector('${item.parentEl.tagName}#${item.parentEl.attrs["id"].replace(/"/g, '')}').appendChild(${item.tagName})`)
+                        } else if (keys.includes('class')) {
+                            
+                            if (item.parentEl.attrs["class"].match(/\s/g)) {
+                                var fstClass = item.parentEl.attrs["class"].replace(/"/g, '').split(' ')[0]
+                                createElement.push(`document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`)
+                            } else {
+                                var fstClass = item.parentEl.attrs["class"].replace(/"/g, '')
+                                createElement.push(`document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`)
+                                
+                            }
+                        } else {
+                            createElement.push(`document.querySelector('${item.parentEl.tagName}').appendChild(${item.tagName})`)
+                        }
+                        
+                        
+                    } else {
+                        createElement.push(`document.body.appendChild(${item.tagName})`)
+                    }
+                    
+                    createElement.push('//=====================================================')
+                });
+                
+                editor.edit(editBuilder => {
+                    editBuilder.replace(selection, createElement.join('\n'));
+                });
+                
+            }
+            
+            
+        })
+        
+        
+        
+        
+    );
+        
+    context.subscriptions.push(
+        vscode.commands.registerCommand('selector-js.qsby', async function () {
+                
+            let htmlObjs = []
+            let declarations = []
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                const document = editor.document;
+                const selection = editor.selection;
+                let html = document.getText(selection);
+                // =====================================================
+                html = html.match(/<.+?>/g).join('')
+                var root = HTMLParser.parse(html)
+                // =====================================================
+                root.childNodes.forEach((item) => {
+                        
+                    nesting(item, htmlObjs, 0, null)
+                        
+                });
+                    
+                let result = await vscode.window.showQuickPick([
+                    'id',
+                    'class',
+                    'tagName'
+                ])
+                    
+                htmlObjs.forEach((item) => {
+                    if (result == 'id') {
+                        if (item.attrs[result]) {
+                            let varableName = item.attrs[result].replace(/"/g, '')
+                            // =====================================================
+                            if (varableName.match(/^\d+/m)) {
+                                const lengthOfDigits = varableName.match(/^\d+/m)[0].length
+                                varableName = varableName.substring(lengthOfDigits)
+                            }
+                            // =====================================================
+                            if (varableName.match(/-/g)) {
+                                varableName = varableName.split("-")
+                                for (let j = 1; j < varableName.length; j++) {
+                                    varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
+                                }
+                                varableName = varableName.join('')
+                            }
+                            // =====================================================
+                            let varable = `${varableName} = document.getElementById('${item.attrs[result].replace(/"/g, '')}')`
+                            declarations.push(varable)
+                        }
+                    } else if (result == 'class') {
+                            
+                        if (item.attrs[result]) {
+                            let classValue = item.attrs[result].replace(/"/g, '')
+                                
+                            if (classValue.match(/\s/g)) {
+                                var classes = classValue.split(" ")
+                                    
+                                classes.filter(element => element != '')
+                                    
+                                classValue = classes[0]
+                                // console.log(classValue);
+                            }
+                                
+                                
+                            let varableName = classValue
+                            if (varableName.match(/^\d+/m)) {
+                                const lengthOfDigits = varableName.match(/^\d+/m)[0].length
+                                varableName = varableName.substring(lengthOfDigits)
+                            }
+                            // console.log(varableName);
+                                
+                            if (varableName.match(/-/g)) {
+                                varableName = varableName.split("-")
+                                    
+                                varableName.filter(element => element != '')
+                                    
+                                for (let j = 1; j < varableName.length; j++) {
+                                    varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
+                                }
+                                varableName = varableName.join('')
+                            }
+                                
+                            let varable = `${varableName} = document.querySelector('.${classValue}')`
+                            declarations.push(varable)
+                                
+                            //  
+                        }
+                    } else if (result == 'tagName') {
+                        let varable = `${item.tagName} = document.querySelector('${item.tagName}')`
+                        declarations.push(varable)
+                    }
+                        
+                });
+                    
+                for (let i = 1; i < declarations.length; i++) {
+                    declarations[i] = htmlObjs[i].tabSize + declarations[i]
+                }
+                let finalString;
+                if (declarations.length == 1) {
+                    finalString = 'const ' + declarations[0]
+                } else {
+                    finalString = 'const \n' + declarations.join(",\n")
+                }
+                    
+                ncp.copy(finalString, function () {
+                    vscode.window.showInformationMessage("OK");
+                })
+                    
+                    
+                    
+                    
+            }
+                
+                
+        })
+    )
+            
+    context.subscriptions.push(
+        vscode.commands.registerCommand('selector-js.qsaby', async function () {
+                    
+            let htmlObjs = []
+            let declarations = []
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                const document = editor.document;
+                const selection = editor.selection;
+                let html = document.getText(selection);
+                // =====================================================
+                html = html.match(/<.+?>/g).join('')
+                var root = HTMLParser.parse(html)
+                // =====================================================
+                root.childNodes.forEach((item) => {
+                            
+                    nesting(item, htmlObjs, 0, null)
+                            
+                });
+                        
+                let result = await vscode.window.showQuickPick([
+                    'id',
+                    'class',
+                    'name',
+                    'tagName'
+                ])
+                        
+                htmlObjs.forEach((item) => {
+                    if (result == 'id') {
+                        if (item.attrs[result]) {
+                            let varableName = item.attrs[result].replace(/"/g, '')
+                            // =====================================================
+                            if (varableName.match(/^\d+/m)) {
+                                const lengthOfDigits = varableName.match(/^\d+/m)[0].length
+                                varableName = varableName.substring(lengthOfDigits)
+                            }
+                            // =====================================================
+                            if (varableName.match(/-/g)) {
+                                varableName = varableName.split("-")
+                                for (let j = 1; j < varableName.length; j++) {
+                                    varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
+                                }
+                                varableName = varableName.join('')
+                            }
+                            // =====================================================
+                            let varable = `${varableName}s = document.querySelectorAll('#${item.attrs[result].replace(/"/g, '')}')`
+                            declarations.push(varable)
+                        }
+                    } else if (result == 'class') {
+                                
+                        if (item.attrs[result]) {
+                            let classValue = item.attrs[result].replace(/"/g, '')
+                                    
+                            if (classValue.match(/\s/g)) {
+                                var classes = classValue.split(" ")
+                                        
+                                classes.filter(element => element != '')
+                                        
+                                classValue = classes[0]
+                                // console.log(classValue);
+                            }
+                                    
+                                    
+                            let varableName = classValue
+                            if (varableName.match(/^\d+/m)) {
+                                const lengthOfDigits = varableName.match(/^\d+/m)[0].length
+                                varableName = varableName.substring(lengthOfDigits)
+                            }
+                            // console.log(varableName);
+                                    
+                            if (varableName.match(/-/g)) {
+                                varableName = varableName.split("-")
+                                        
+                                varableName.filter(element => element != '')
+                                        
+                                for (let j = 1; j < varableName.length; j++) {
+                                    varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
+                                }
+                                varableName = varableName.join('')
+                            }
+                                    
+                            let varable = `${varableName}s = document.getElementsByClassName('${classValue}')`
+                            declarations.push(varable)
+                                    
+                            //  
+                        }
+                    } else if (result == 'name') {
+                                
+                                
+                                
+                        if (item.attrs[result]) {
+                            let varableName = item.attrs[result].replace(/"/g, '')
+                            // =====================================================
+                            if (varableName.match(/^\d+/m)) {
+                                const lengthOfDigits = varableName.match(/^\d+/m)[0].length
+                                varableName = varableName.substring(lengthOfDigits)
+                            }
+                            // =====================================================
+                            if (varableName.match(/-/g)) {
+                                varableName = varableName.split("-")
+                                for (let j = 1; j < varableName.length; j++) {
+                                    varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
+                                }
+                                varableName = varableName.join('')
+                            }
+                            // =====================================================
+                            let varable = `${varableName}s = document.getElementsByName('${item.attrs[result].replace(/"/g, '')}')`
+                            declarations.push(varable)
+                        }
+                                
+                                
+                                
+                                
+                                
+                    } else if (result == 'tagName') {
+                        let varable = `${item.tagName}s = document.getElementsByTagName('${item.tagName}')`
+                        declarations.push(varable)
+                    }
+                            
+                });
+                        
+                for (let i = 1; i < declarations.length; i++) {
+                    declarations[i] = htmlObjs[i].tabSize + declarations[i]
+                }
+                let finalString;
+                if (declarations.length == 1) {
+                    finalString = 'const ' + declarations[0]
+                } else {
+                    finalString = 'const \n' + declarations.join(",\n")
+                }
+                        
+                ncp.copy(finalString, function () {
+                    vscode.window.showInformationMessage("OK");
+                })
+                        
+                        
+                        
+                        
+            }
+                    
+                    
+        })
+    )
+                
+                
+                
+    context.subscriptions.push(
+        vscode.commands.registerCommand('selector-js.qswd', function () {
+                        
+            let htmlObjs = []
+            let declarations = []
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                            
+                const document = editor.document;
+                const selection = editor.selection;
+                let html = document.getText(selection);
+                // =====================================================
+                html = html.match(/<.+?>/g).join('')
+                var root = HTMLParser.parse(html)
+                // =====================================================
+                root.childNodes.forEach((item) => {
+
+                    nesting(item, htmlObjs, 0, null)
+
+                });
+                            
+                htmlObjs.forEach((item) => {
+    
+                    const keys = Object.keys(item.attrs)
+                    if (keys.includes('id')) {
+                        // =====================================================
+                        let varableName = checkIdVarName(item.attrs['id'])
+                        // =====================================================
+                        if (item.parentEl) {
+                            var tagNameOfParent = item.parentEl.tagName
+
+                            if (Object.keys(item.parentEl.attrs).length != 0) {
+            
+                
+                                var attrsOfParent = item.parentEl.attrs
+                                var keysOfParent = Object.keys(attrsOfParent)
+                                if (keysOfParent.includes('id')) {
+
+                                    var parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '')
+                                    var childIdAttrsV = item.attrs['id'].replace(/"/g, '')
+                
+                                    let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}#${childIdAttrsV}')`
+                                    declarations.push(varable)
+
+
+
+
+
+                                } else if (keysOfParent.includes('class')) {
+                                    var parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '')
+                
+                                    if (parentclassAttrsV.match(/\s/g)) {
+                                        var classes = parentclassAttrsV.split(" ")
 						
-						let varableName = idValue
-						if (varableName.match(/^\d+/m)) {
-							const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-							varableName = varableName.substring(lengthOfDigits)
-						}
+                                        classes.filter(element => element != '')
 						
-						if (varableName.match(/-/g)) {
-							varableName = varableName.split("-")
-							
-							
-							for (let j = 1; j < varableName.length; j++) {
-								varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-							}
-							varableName = varableName.join('')
-						} else {
-							varableName = idValue[0].toUpperCase() + idValue.substring(1)
-						}
+                                        parentclassAttrsV = classes[0]
+                                    }
+
+                                    var childIdAttrsV = item.attrs['id'].replace(/"/g, '')
+
+                                    let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}#${childIdAttrsV}')`
+                                    declarations.push(varable)
+
+
+                                }
+                            } else {
+                                var childIdAttrsV = item.attrs['id'].replace(/"/g, '')
+                                let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}#${childIdAttrsV}')`
+                                declarations.push(varable)
+
+                            }
+                        } else {
+                            let varable = `${varableName} = document.querySelector('${item.tagName}#${item.attrs['id'].replace(/"/g, '')}')`
+                            declarations.push(varable)
+                        }
+        
+
+
+                        // =====================================================
+
+
+                    } else if (keys.includes('class')) {
+                        let varableName = checkClassVarName(item.attrs['class'])
+        
+
+                        if (item.parentEl) {
+                            var tagNameOfParent = item.parentEl.tagName
+
+                            if (Object.keys(item.parentEl.attrs).length != 0) {
+                                // =====================================================
+                                var attrsOfParent = item.parentEl.attrs
+                                var keysOfParent = Object.keys(attrsOfParent)
+
+                                if (keysOfParent.includes('id')) {
+
+                                    var parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '')
+                                    var childClassAttrsV = item.attrs['class'].replace(/"/g, '')
+                
+                                    let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}.${childClassAttrsV}')`
+                                    declarations.push(varable)
+
+
+
+
+
+                                } else if (keysOfParent.includes('class')) {
+                                    var parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '')
+                
+                                    if (parentclassAttrsV.match(/\s/g)) {
+                                        var classes = parentclassAttrsV.split(" ")
 						
-						let varable = `${item.tagName}${varableName[0].toUpperCase()+varableName.substring(1)} = document.querySelector('${item.tagName}[id="${idValue}"]')`
-						declarations.push(varable)
-					} else if (haveType(item.attrs)) {
-						let typeValue = item.attrs.match(/(?<=type=\")([a-z\d]+)(?=\")/g)[0]
-						let typeValue2 = typeValue[0].toUpperCase() + typeValue.substring(1)
-						let varable = `${item.tagName}${typeValue2} = document.querySelector('${item.tagName}[type="${typeValue}"]')`
-						declarations.push(varable)
-					} else if (haveName(item.attrs)) {
-						let nameValue = item.attrs.match(/(?<=name=\")([a-z\d]+)(?=\")/g)[0]
+                                        classes.filter(element => element != '')
 						
-						let varableName = nameValue
-						if (varableName.split("-")) {
-							varableName = varableName.split("-")
-							
-							if (varableName.match(/^\d+/m)) {
-								const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-								varableName = varableName.substring(lengthOfDigits)
-							}
-							
-							for (let j = 1; j < varableName.length; j++) {
-								varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-							}
-							varableName = varableName.join('')
-						} else {
-							varableName = nameValue[0].toUpperCase() + nameValue.substring(1)
-						}
-						
-						let varable = `${item.tagName}${varableName} = document.querySelector('${item.tagName}[name="${nameValue}"]')`
-						declarations.push(varable)
-					} else if (haveValue(item.attrs)) {
-						let valueValue = item.attrs.match(/(?<=value=\")([a-z\d]+)(?=\")/g)[0]
-						let valueValue2 = valueValue[0].toUpperCase() + valueValue.substring(1)
-						let varable = `${item.tagName}${valueValue2} = document.querySelector('${item.tagName}[value="${valueValue}"]')`
-						declarations.push(varable)
-					} else if (haveAccesskey(item.attrs)) {
-						let accesskeyValue = item.attrs.match(/(?<=accesskey=\")([a-z\d]+)(?=\")/g)[0]
-						let accesskeyValue2 = accesskeyValue[0].toUpperCase() + accesskeyValue.substring(1)
-						let varable = `${item.tagName}${accesskeyValue2} = document.querySelector('${item.tagName}[accesskey="${accesskeyValue}"]')`
-						declarations.push(varable)
-					}
-					break;
+                                        parentclassAttrsV = classes[0]
+                                    }
+
+                                    var childClassAttrsV = item.attrs['class'].replace(/"/g, '')
+
+                                    let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}.${childClassAttrsV}')`
+                                    declarations.push(varable)
+
+
+                                }
+                                // =====================================================
+                            } else {
+                
+                                let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}.${item.attrs['class'].replace(/"/g, '')}')`
+                                declarations.push(varable)
+                            }
+            
+
+                        } else {
+                            let varable = `${varableName} = document.querySelector('${item.tagName}.${item.attrs['class'].replace(/"/g, '')}')`
+                            declarations.push(varable)
+                        }
+        
+
+
+
+                    } else {
+                        let varableName = item.tagName
+
+                        if (item.parentEl) {
+                            var tagNameOfParent = item.parentEl.tagName
+                            if (Object.keys(item.parentEl.attrs).length != 0) {
+                                var attrsOfParent = item.parentEl.attrs
+                
+                                var keysOfParent = Object.keys(attrsOfParent)
+    
+                                if (keysOfParent.includes('id')) {
+    
+                                    var parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '')
+                    
+                                    let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}')`
+                                    declarations.push(varable)
+    
+    
+    
+    
+    
+                                } else if (keysOfParent.includes('class')) {
+                                    var parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '')
+                    
+                                    if (parentclassAttrsV.match(/\s/g)) {
+                                        var classes = parentclassAttrsV.split(" ")
+                            
+                                        classes.filter(element => element != '')
+                            
+                                        parentclassAttrsV = classes[0]
+                                    }
+    
+    
+                                    let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}')`
+                                    declarations.push(varable)
+    
+    
+                                }
+                
+                            } else {
+                
+                                let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}')`
+                                declarations.push(varable)
+
+                            }
+
+                        } else {
+                            let varable = `${varableName} = document.querySelector('${item.tagName}')`
+                            declarations.push(varable)
+                        }
+
+                    }
+
+
+                });
+                        
+
+                const tab = '    '
+                htmlObjs.forEach((item) => {
 					
-					case 'button':
-					if (haveId(item.attrs)) {
-						/* let idValue = item.attrs.match(/(?<=id=\")([a-z\d]+)(?=\")/g)[0]
-						let idValue2 = idValue[0].toUpperCase() + idValue.substring(1)
-						let varable = `btn${idValue2} = document.querySelector('${item.tagName}[id="${idValue}"]')`
-						declarations.push(varable) */
-						let idValue = item.attrs.match(/(?<=id=\")([a-z\d-_]+)(?=\")/g)[0]
-						
-						let varableName = idValue
-						if (varableName.match(/^\d+/m)) {
-							const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-							varableName = varableName.substring(lengthOfDigits)
-						}
-						
-						if (varableName.match(/-/g)) {
-							varableName = varableName.split("-")
-							
-							
-							for (let j = 1; j < varableName.length; j++) {
-								varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-							}
-							varableName = varableName.join('')
-						} else {
-							varableName = idValue[0].toUpperCase() + idValue.substring(1)
-						}
-						
-						let varable = `btn${varableName[0].toUpperCase()+varableName.substring(1)} = document.querySelector('${item.tagName}[id="${idValue}"]')`
-						declarations.push(varable)
-					} else if (haveType(item.attrs)) {
-						let typeValue = item.attrs.match(/(?<=type=\")([a-z\d]+)(?=\")/g)[0]
-						let typeValue2 = typeValue[0].toUpperCase() + typeValue.substring(1)
-						let varable = `btn${typeValue2} = document.querySelector('${item.tagName}[type="${typeValue}"]')`
-						declarations.push(varable)
-					} else if (haveName(item.attrs)) {
-						let nameValue = item.attrs.match(/(?<=name=\")([a-z\d]+)(?=\")/g)[0]
-						let nameValue2 = nameValue[0].toUpperCase() + nameValue.substring(1)
-						let varable = `btn${nameValue2} = document.querySelector('${item.tagName}[name="${nameValue}"]')`
-						declarations.push(varable)
-					} else if (haveValue(item.attrs)) {
-						let valueValue = item.attrs.match(/(?<=value=\")([a-z\d-_]+)(?=\")/g)[0]
-						let valueValue2 = valueValue[0].toUpperCase() + valueValue.substring(1)
-						let varable = `btn${valueValue2} = document.querySelector('${item.tagName}[value="${valueValue}"]')`
-						declarations.push(varable)
-					} else if (haveAccesskey(item.attrs)) {
-						let accesskeyValue = item.attrs.match(/(?<=accesskey=\")([a-z\d-_]+)(?=\")/g)[0]
-						let accesskeyValue2 = accesskeyValue[0].toUpperCase() + accesskeyValue.substring(1)
-						let varable = `btn${accesskeyValue2} = document.querySelector('${item.tagName}[accesskey="${accesskeyValue}"]')`
-						declarations.push(varable)
-					}
+                    var tabs = ''
+                    for (let i = 0; i < item.nestingLevel; i++) {
+                        tabs += tab
+                    }
+                    item.tabSize = tabs
+                });
+                            
+                for (let i = 0; i < declarations.length; i++) {
+                    declarations[i] = htmlObjs[i].tabSize + declarations[i]
+                }
+                            
+                let finalString;
+                if (declarations.length == 1) {
+                    finalString = 'const ' + declarations.join(",\n")
+                } else {
+                    finalString = 'const \n' + declarations.join(",\n")
+                }
+                ncp.copy(finalString, function () {
+                    vscode.window.showInformationMessage("OK");
+                })
+
+            }
+                        
+                        
+                        
+        })
+                    
+                    
+    )
+                    
+
+
+
+                    
+    context.subscriptions.push(
+        vscode.commands.registerCommand('selector-js.qs', function () {
+            
+            let htmlObjs = []
+            let declarations = []
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                const document = editor.document;
+                const selection = editor.selection;
+                let html = document.getText(selection);
+                // =====================================================
+                html = html.match(/<.+?>/g).join('')
+                var root = HTMLParser.parse(html)
+                // =====================================================
+                root.childNodes.forEach((item) => {
+
+                    nesting(item, htmlObjs, 0, null)
+
+                });
+                            
+                htmlObjs.forEach((item) => {
+                    
+                    if (Object.keys(item.attrs).length != 0) {
+if (item.tagName == 'button') {
+    buttonCorrect(item, declarations)
+}else {
+    qs(item, declarations)
+}
+                        
+                    }else {
+
+                        if (item.tagName == 'button') {
+                            var varable = `btn = document.querySelector('${item.tagName}')`
+                            declarations.push(varable)
+                        } else {
+                        
+                            var varable = `${item.tagName} = document.querySelector('${item.tagName}')`
+                            declarations.push(varable)
+                        }
+                    }
+
+
+                })
+
+const tab = '    '
+                htmlObjs.forEach((item) => {
 					
-					break;
-					case 'label':
-					if (haveId(item.attrs)) {
-						let idValue = item.attrs.match(/(?<=id=\")([a-z\d-_]+)(?=\")/g)[0]
-						let idValue2 = idValue[0].toUpperCase() + idValue.substring(1)
-						let varable = `${item.tagName}${idValue2} = document.querySelector('${item.tagName}[id="${idValue}"]')`
-						declarations.push(varable)
-					} else if (haveFor(item.attrs)) {
-						let forValue = item.attrs.match(/(?<=for=\")([a-z\d]+)(?=\")/g)[0]
-						let forValue2 = forValue[0].toUpperCase() + forValue.substring(1)
-						let varable = `${item.tagName}${forValue2} = document.querySelector('${item.tagName}[id="${forValue}"]')`
-						declarations.push(varable)
-					} else if (haveAccesskey(item.attrs)) {
-						let accesskeyValue = item.attrs.match(/(?<=accesskey=\")([a-z\d]+)(?=\")/g)[0]
-						let accesskeyValue2 = accesskeyValue[0].toUpperCase() + accesskeyValue.substring(1)
-						let varable = `${item.tagName}${accesskeyValue2} = document.querySelector('${item.tagName}[accesskey="${accesskeyValue}"]')`
-						declarations.push(varable)
-					}
+                    var tabs = ''
+                    for (let i = 0; i < item.nestingLevel; i++) {
+                        tabs += tab
+                    }
+                    item.tabSize = tabs
+                });
+                            
+                for (let i = 0; i < declarations.length; i++) {
+                    declarations[i] = htmlObjs[i].tabSize + declarations[i]
+                }
+                            
+                let finalString;
+                if (declarations.length == 1) {
+                    finalString = 'const ' + declarations.join(",\n")
+                } else {
+                    finalString = 'const \n' + declarations.join(",\n")
+                }
+                ncp.copy(finalString, function () {
+                    vscode.window.showInformationMessage("OK");
+                })
+
+
+
+            }
+
+    })
+
+    )
+
+    
+    context.subscriptions.push(
+        vscode.commands.registerCommand('selector-js.qsa', function () {
+            
+            let htmlObjs = []
+            let declarations = []
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                const document = editor.document;
+                const selection = editor.selection;
+                let html = document.getText(selection);
+                // =====================================================
+                html = html.match(/<.+?>/g).join('')
+                var root = HTMLParser.parse(html)
+                // =====================================================
+                root.childNodes.forEach((item) => {
+
+                    nesting(item, htmlObjs, 0, null)
+
+                });
+                            
+                htmlObjs.forEach((item) => {
+                    
+                    if (Object.keys(item.attrs).length != 0) {
+if (item.tagName == 'button') {
+    buttonAllCorrect(item, declarations)
+}else {
+    qsa(item, declarations)
+}
+                        
+                    }else {
+
+                        if (item.tagName == 'button') {
+                            var varable = `btns = document.getElementsByTagName('${item.tagName}')`
+                            declarations.push(varable)
+                        } else {
+                        
+                            var varable = `${item.tagName}s = document.getElementsByTagName('${item.tagName}')`
+                            declarations.push(varable)
+                        }
+                    }
+
+
+                })
+
+const tab = '    '
+                htmlObjs.forEach((item) => {
 					
-					break;
-					
-					
-				}
-				
-				
-				
-				
-			} else {
-				if (haveId(item.attrs)) {
-					let idValue = item.attrs.match(/id=".+?"/g)[0]
-					idValue = idValue.replace(/id=/g, '')
-					idValue = idValue.replace(/"/g, '')
-					
-					
-					
-					let varableName = idValue
-					// Если имя переменной начинается с цифры
-					if (varableName.match(/^\d+/m)) {
-						const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-						varableName = varableName.substring(lengthOfDigits)
-					}
-					if (varableName.match(/-/g)) {
-						varableName = varableName.split("-")
-						
-						varableName.filter(element => element != '')
-						
-						/* if (varableName.join().match(/^\d+/m)) {
-							const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-							varableName = varableName.substring(lengthOfDigits)
-						} */
-						
-						for (let j = 1; j < varableName.length; j++) {
-							varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-						}
-						varableName = varableName.join('')
-					}
-					let varable = `${varableName} = document.getElementById('${idValue}')`
-					declarations.push(varable)
-				} else if (haveClass(item.attrs)) {
-					let classValue = item.attrs.match(/class=".+?"/g)[0]
-					classValue = classValue.replace(/class=/g, '')
-					classValue = classValue.replace(/"/g, '')
-					
-					if (classValue.match(/-/g)) {
-						vscode.window.showInformationMessage('Will select the first class name')
-						var classes = classValue.split(" ")
-						
-						classes.filter(element => element != '')
-						
-						classValue = classes[0]
-					}
-					
-					let varableName = classValue
-					if (varableName.match(/^\d+/m)) {
-						const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-						varableName = varableName.substring(lengthOfDigits)
-					}
-					
-					if (varableName.match(/-/g)) {
-						varableName = varableName.split("-")
-						
-						varableName.filter(element => element != '')
-						
-						for (let j = 1; j < varableName.length; j++) {
-							varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-						}
-						varableName = varableName.join('')
-					}
-					
-					let varable = `${varableName} = document.querySelector('.${classValue}')`
-					declarations.push(varable)
-				} else {
-					let varable = `${item.tagName} = document.querySelector('${item.tagName}')`
-					declarations.push(varable)
-				}
-			}
-			
-			
-			
-		} else if (qs == 'all') {
-			
-			if (item.tagName == 'input' || item.tagName == 'label' || item.tagName == 'button' && item.attrs.trim() != '') {
-				switch (item.tagName) {
-					case 'input':
-					if (haveId(item.attrs)) {
-						let idValue = item.attrs.match(/(?<=id=\")([a-z\d-_]+)(?=\")/g)[0]
-						
-						let varableName = idValue
-						if (varableName.match(/^\d+/m)) {
-							const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-							varableName = varableName.substring(lengthOfDigits)
-						}
-						
-						if (varableName.match(/-/g)) {
-							varableName = varableName.split("-")
-							
-							
-							for (let j = 1; j < varableName.length; j++) {
-								varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-							}
-							varableName = varableName.join('')
-						} else {
-							varableName = idValue[0].toUpperCase() + idValue.substring(1)
-						}
-						
-						let varable = `${item.tagName}${varableName[0].toUpperCase()+varableName.substring(1)} = document.querySelectorAll('${item.tagName}[id="${idValue}"]')`
-						declarations.push(varable)
-						
-						
-					} else if (haveType(item.attrs)) {
-						let typeValue = item.attrs.match(/(?<=type=\")([a-z\d-_]+)(?=\")/g)[0]
-						let typeValue2 = typeValue[0].toUpperCase() + typeValue.substring(1)
-						let varable = `${item.tagName}${typeValue2} = document.querySelectorAll('${item.tagName}[type="${typeValue}"]')`
-						declarations.push(varable)
-					} else if (haveName(item.attrs)) {
-						let nameValue = item.attrs.match(/(?<=name=\")([a-z\d-_]+)(?=\")/g)[0]
-						let nameValue2 = nameValue[0].toUpperCase() + nameValue.substring(1)
-						let varable = `${item.tagName}${nameValue2} = document.querySelectorAll('${item.tagName}[name="${nameValue}"]')`
-						declarations.push(varable)
-					} else if (haveValue(item.attrs)) {
-						let valueValue = item.attrs.match(/(?<=value=\")([a-z\d-_]+)(?=\")/g)[0]
-						let valueValue2 = valueValue[0].toUpperCase() + valueValue.substring(1)
-						let varable = `${item.tagName}${valueValue2} = document.querySelectorAll('${item.tagName}[value="${valueValue}"]')`
-						declarations.push(varable)
-					} else if (haveAccesskey(item.attrs)) {
-						let accesskeyValue = item.attrs.match(/(?<=accesskey=\")([a-z\d-_]+)(?=\")/g)[0]
-						let accesskeyValue2 = accesskeyValue[0].toUpperCase() + accesskeyValue.substring(1)
-						let varable = `${item.tagName}${accesskeyValue2} = document.querySelectorAll('${item.tagName}[accesskey="${accesskeyValue}"]')`
-						declarations.push(varable)
-					}
-					break;
-					
-					case 'button':
-					if (haveId(item.attrs)) {
-						let idValue = item.attrs.match(/(?<=id=\")([a-z\d-_]+)(?=\")/g)[0]
-						
-						let varableName = idValue
-						if (varableName.match(/^\d+/m)) {
-							const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-							varableName = varableName.substring(lengthOfDigits)
-						}
-						
-						if (varableName.match(/-/g)) {
-							varableName = varableName.split("-")
-							
-							
-							for (let j = 1; j < varableName.length; j++) {
-								varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-							}
-							varableName = varableName.join('')
-						} else {
-							varableName = idValue[0].toUpperCase() + idValue.substring(1)
-						}
-						
-						let varable = `btn${varableName[0].toUpperCase()+varableName.substring(1)} = document.querySelectorAll('${item.tagName}[id="${idValue}"]')`
-						declarations.push(varable)
-						
-					} else if (haveType(item.attrs)) {
-						let typeValue = item.attrs.match(/(?<=type=\")([a-z\d-_]+)(?=\")/g)[0]
-						let typeValue2 = typeValue[0].toUpperCase() + typeValue.substring(1)
-						let varable = `btn${typeValue2} = document.querySelectorAll('${item.tagName}[type="${typeValue}"]')`
-						declarations.push(varable)
-					} else if (haveName(item.attrs)) {
-						let nameValue = item.attrs.match(/(?<=name=\")([a-z\d-_]+)(?=\")/g)[0]
-						let nameValue2 = nameValue[0].toUpperCase() + nameValue.substring(1)
-						let varable = `btn${nameValue2} = document.querySelectorAll('${item.tagName}[name="${nameValue}"]')`
-						declarations.push(varable)
-					} else if (haveValue(item.attrs)) {
-						let valueValue = item.attrs.match(/(?<=value=\")([a-z\d-_]+)(?=\")/g)[0]
-						let valueValue2 = valueValue[0].toUpperCase() + valueValue.substring(1)
-						let varable = `btn${valueValue2} = document.querySelectorAll('${item.tagName}[value="${valueValue}"]')`
-						declarations.push(varable)
-					} else if (haveAccesskey(item.attrs)) {
-						let accesskeyValue = item.attrs.match(/(?<=accesskey=\")([a-z\d-_]+)(?=\")/g)[0]
-						let accesskeyValue2 = accesskeyValue[0].toUpperCase() + accesskeyValue.substring(1)
-						let varable = `btn${accesskeyValue2} = document.querySelectorAll('${item.tagName}[accesskey="${accesskeyValue}"]')`
-						declarations.push(varable)
-					}
-					
-					break;
-					
-					
-					case 'label':
-					if (haveId(item.attrs)) {
-						let idValue = item.attrs.match(/(?<=id=\")([a-z\d-_]+)(?=\")/g)[0]
-						
-						let varableName = idValue
-						if (varableName.match(/^\d+/m)) {
-							const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-							varableName = varableName.substring(lengthOfDigits)
-						}
-						
-						if (varableName.match(/-/g)) {
-							varableName = varableName.split("-")
-							
-							
-							for (let j = 1; j < varableName.length; j++) {
-								varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-							}
-							varableName = varableName.join('')
-						} else {
-							varableName = idValue[0].toUpperCase() + idValue.substring(1)
-						}
-						
-						let varable = `${item.tagName}${varableName[0].toUpperCase()+varableName.substring(1)} = document.querySelectorAll('${item.tagName}[id="${idValue}"]')`
-						declarations.push(varable)
-						
-					} else if (haveFor(item.attrs)) {
-						let forValue = item.attrs.match(/(?<=for=\")([a-z\d-_]+)(?=\")/g)[0]
-						let forValue2 = forValue[0].toUpperCase() + forValue.substring(1)
-						let varable = `${item.tagName}${forValue2} = document.querySelectorAll('${item.tagName}[id="${forValue}"]')`
-						declarations.push(varable)
-					} else if (haveAccesskey(item.attrs)) {
-						let accesskeyValue = item.attrs.match(/(?<=accesskey=\")([a-z\d-_]+)(?=\")/g)[0]
-						let accesskeyValue2 = accesskeyValue[0].toUpperCase() + accesskeyValue.substring(1)
-						let varable = `${item.tagName}${accesskeyValue2} = document.querySelectorAll('${item.tagName}[accesskey="${accesskeyValue}"]')`
-						declarations.push(varable)
-					}
-					break;
-					
-					
-				}
-				
-			} else {
-				if (haveId(item.attrs)) {
-					let idValue = item.attrs.match(/id=".+?"/g)[0]
-					idValue = idValue.replace(/id=/g, '')
-					idValue = idValue.replace(/"/g, '')
-					
-					let varableName = idValue
-					
-					// Если имя переменной начинается с цифры
-					if (varableName.match(/^\d+/m)) {
-						const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-						varableName = varableName.substring(lengthOfDigits)
-					}
-					
-					if (varableName.match(/-/g)) {
-						varableName = varableName.split("-")
-						
-						varableName.filter(element => element != '')
-						
-						for (let j = 1; j < varableName.length; j++) {
-							varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-						}
-						varableName = varableName.join('')
-					}
-					let varable = `${varableName} = document.getElementById('${idValue}')`
-					declarations.push(varable)
-				} else if (haveClass(item.attrs)) {
-					// let classValue = item.attrs.match(/(?<=class=\")([a-z\d]+)(?=\")/g)[0]
-					let classValue = item.attrs.match(/class=".+?"/g)[0]
-					classValue = classValue.replace(/class=/g, '')
-					classValue = classValue.replace(/"/g, '')
-					
-					
-					if (classValue.split(" ")) {
-						// vscode.window.showInformationMessage('Will select the first class name')
-						var classes = classValue.split(" ")
-						
-						classes.filter(element => element != '')
-						
-						classValue = classes[0]
-					}
-					
-					let varableName = classValue
-					
-					if (varableName.match(/^\d+/m)) {
-						const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-						varableName = varableName.substring(lengthOfDigits)
-					}
-					
-					if (varableName.match(/-/g)) {
-						varableName = varableName.split("-")
-						
-						varableName.filter(element => element != '')
-						
-						/* if (varableName.match(/^\d+/m)) {
-							const lengthOfDigits = varableName.match(/^\d+/m)[0].length
-							varableName = varableName.substring(lengthOfDigits)
-						} */
-						
-						for (let j = 1; j < varableName.length; j++) {
-							varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1)
-						}
-						varableName = varableName.join('')
-					}
-					
-					let varable = `${varableName} = document.getElementsByClassName('.${classValue}')`
-					declarations.push(varable)
-					
-				} else {
-					let varable = `${item.tagName} = document.getElementsByTagName('${item.tagName}')`
-					declarations.push(varable)
-				}
-			}
-			
-			
-			
-			
-			
-			
-		}
-		
-		
-	}
-	// =====================================================
-	
-	context.subscriptions.push(
-		vscode.commands.registerCommand('selector-js.qs', function () {
-			let htmlObj = []
-			let declarations = []
-			const editor = vscode.window.activeTextEditor;
-			// =====================================================
-			if (editor) {
-				function nesting(htmlEL, nestingLevel) {
-					if (html.childNodes == 0) {
-						// =====================================================
-						var
-						tagName = htmlEL.rawTagName
-						attrs = htmlEL.rawAttrs;
-						// =====================================================
-						var tag = new htmlElement(tagName, attrs, '', nestingLevel)
-						htmlObj.push(tag)
-					}else {
-						var tagName = htmlEL.rawTagName
-						var attrs = htmlEL.rawAttrs
-						let tag = new htmlElement(tagName, '', attrs, nestingLevel)
-						htmlObj.push(tag)
-						nestingLevel++
-						for (let i = 0; i < htmlEL.childNodes.length; i++) {
-							nesting(htmlEL.childNodes[i], nestingLevel)
-						}
-					}
-				}
-				
-				// =====================================================
-				const document = editor.document;
-				const selection = editor.selection;
-				let html = document.getText(selection);
-				// =====================================================
-				// =====================================================
-				html = html.match(/<.+?>/g).join('')
-				var root = HTMLParser.parse(html)
-				// =====================================================
-				
-				root.childNodes.forEach((item) => {
-					nesting(item, 0)
-				});
-				
-				
-				htmlObj.forEach((item) => {
-					
-					querySelector(item, declarations, 'single')
-					
-				});
-				
-				const tab = '    '
-				htmlObj.forEach((item) => {
-					
-					var tabs = ''
-					for (let i = 0; i < item.nestingLevel; i++) {
-						tabs += tab
-					}
-					item.tabSize = tabs
-				});
-				
-				for (let i = 0; i < declarations.length; i++) {
-					declarations[i] =  htmlObj[i].tabSize + declarations[i]
-				}
-				let finalString;
-				if(declarations.length == 1) {
-					finalString = 'const '+declarations.join(",\n")
-				}else {
-					finalString = 'const \n'+declarations.join(",\n")
-				}
-				ncp.copy(finalString, function () {
-					vscode.window.showInformationMessage("OK");
-				})
-			}
-		})
-		);
-		
-		// =====================================================
-		
-		context.subscriptions.push(
-			vscode.commands.registerCommand('selector-js.qsa', function () {
-				let htmlObj = []
-				let declarations = []
-				const editor = vscode.window.activeTextEditor;
-				// =====================================================
-				if (editor) {
-					function nesting(htmlEL, nestingLevel) {
-						if (html.childNodes == 0) {
-							// =====================================================
-							var
-							tagName = htmlEL.rawTagName
-							attrs = htmlEL.rawAttrs;
-							// =====================================================
-							var tag = new htmlElement(tagName, attrs, '', nestingLevel)
-							htmlObj.push(tag)
-						}else {
-							var tagName = htmlEL.rawTagName
-							var attrs = htmlEL.rawAttrs
-							let tag = new htmlElement(tagName, '', attrs, nestingLevel)
-							htmlObj.push(tag)
-							nestingLevel++
-							for (let i = 0; i < htmlEL.childNodes.length; i++) {
-								nesting(htmlEL.childNodes[i], nestingLevel)
-							}
-						}
-					}
-					
-					// =====================================================
-					const document = editor.document;
-					const selection = editor.selection;
-					let html = document.getText(selection);
-					// =====================================================
-					// =====================================================
-					html = html.match(/<.+?>/g).join('')
-					var root = HTMLParser.parse(html)
-					// =====================================================
-					
-					root.childNodes.forEach((item) => {
-						nesting(item, 0)
-					});
-					
-					
-					htmlObj.forEach((item) => {
-						
-						querySelector(item, declarations, 'all')
-						
-					});
-					
-					const tab = '    '
-					htmlObj.forEach((item) => {
-						
-						var tabs = ''
-						for (let i = 0; i < item.nestingLevel; i++) {
-							tabs += tab
-						}
-						item.tabSize = tabs
-					});
-					
-					for (let i = 0; i < declarations.length; i++) {
-						declarations[i] =  htmlObj[i].tabSize + declarations[i]
-					}
-					
-					let finalString;
-					if(declarations.length == 1) {
-						finalString = 'const '+declarations.join(",\n")
-					}else {
-						finalString = 'const \n'+declarations.join(",\n")
-					}
-					
-					ncp.copy(finalString, function () {
-						vscode.window.showInformationMessage("OK");
-					})
-				}
-			})
-			
-			
-			);
-			
-			
-			
-			
-			
-			// =====================================================
-			
-			context.subscriptions.push(
+                    var tabs = ''
+                    for (let i = 0; i < item.nestingLevel; i++) {
+                        tabs += tab
+                    }
+                    item.tabSize = tabs
+                });
+                            
+                for (let i = 0; i < declarations.length; i++) {
+                    declarations[i] = htmlObjs[i].tabSize + declarations[i]
+                }
+                            
+                let finalString;
+                if (declarations.length == 1) {
+                    finalString = 'const ' + declarations.join(",\n")
+                } else {
+                    finalString = 'const \n' + declarations.join(",\n")
+                }
+                ncp.copy(finalString, function () {
+                    vscode.window.showInformationMessage("OK");
+                })
+
+
+
+            }
+
+    })
+
+    )
+
+
+    context.subscriptions.push(
 				
 				vscode.commands.registerCommand('selector-js.qswe', async function () {
 					
 					
-					let htmlObj = []
+					let htmlObjs = []
 					let declarations = []
 					const editor = vscode.window.activeTextEditor;
 					// =====================================================
 					if (editor) {
-						function nesting (htmlEL, nestingLevel) {
-							if (html.childNodes == 0) {
-								// =====================================================
-								var
-								tagName = htmlEL.rawTagName
-								attrs = htmlEL.rawAttrs;
-								// =====================================================
-								var tag = new htmlElement(tagName, attrs, '', nestingLevel)
-								htmlObj.push(tag)
-							} else {
-								var tagName = htmlEL.rawTagName
-								var attrs = htmlEL.rawAttrs
-								let tag = new htmlElement(tagName, '', attrs, nestingLevel)
-								htmlObj.push(tag)
-								nestingLevel++
-								for (let i = 0; i < htmlEL.childNodes.length; i++) {
-									nesting(htmlEL.childNodes[i], nestingLevel)
-								}
-							}
-						}
-						
 						// =====================================================
 						const document = editor.document;
 						const selection = editor.selection;
@@ -914,28 +1184,18 @@ function activate (context) {
 						
 						
 						root.childNodes.forEach((item) => {
-							nesting(item, 0)
+                    nesting(item, htmlObjs, 0, null)
 						})
 						
 						
-						htmlObj.forEach((item) => {
+						htmlObjs.forEach((item) => {
 							
-							querySelector(item, declarations, 'single')
+							qs(item, declarations)
 							
 						});
 						
-						/* const tab = '    '
-						htmlObj.forEach((item) => {
-							
-							var tabs = ''
-							for (let i = 0; i < item.nestingLevel; i++) {
-								tabs += tab
-							}
-							item.tabSize = tabs
-						}); */
 						
 						for (let i = 0; i < declarations.length; i++) {
-							// declarations[i] =  htmlObj[i].tabSize + 'const '+declarations[i]
 							var declare = declarations[i].match(/([a-zA-Z\d-_]+)(?=\s=)/g)[0]
 							
 							declarations[i] = `const ${declarations[i]}
@@ -959,46 +1219,15 @@ ${declare}.addEventListener("${result}", ${result}On${declare[0].toUpperCase() +
 				
 				);
 				
-				
-				// Selection with details
-				// 
-				/* 
-				Может пригодится
-				{
-					"auto-close-tag.excludedTags": [
-						"area",
-						"base",
-						"br",
-						"col",
-						"command",
-						"embed",
-						"hr",
-						"img",
-						"input",
-						"keygen",
-						"link",
-						"meta",
-						"param",
-						"source",
-						"track",
-						"wbr"
-					]
-				}
-				
-				
-				
-				*/
-				
-				
-				
-				
-				
-			}
-			// =====================================================
-			function deactivate() {}
-			
-			module.exports = {
-				activate,
-				deactivate	
-			}
-			
+
+                    
+                }
+                
+                function deactivate() {}
+                
+                module.exports = {
+                    activate,
+                    deactivate	
+                }
+                
+                
