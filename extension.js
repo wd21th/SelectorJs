@@ -34,7 +34,6 @@ function activate(context) {
 
   function setAttributes(attrs, attrsObj) {
     for (let i = 0; i < attrs.match(/([a-zA-Z\d-_]+)(?==)/g).length; i++) {
-      // attrs[attributeName] = value
       var attributeName = attrs.match(/([a-zA-Z\d-_]+)(?==)/g)[i],
         attributeValue = attrs.match(/".+?"/g)[i];
 
@@ -49,8 +48,6 @@ function activate(context) {
       if (attrs != '') {
         setAttributes(attrs, attrsObj);
       }
-      // setAttributes(attrs, attrsObj)
-      // tabs = tabPlus(nestingLevel,tabs)
       if (parent) {
         var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
 
@@ -66,7 +63,6 @@ function activate(context) {
       if (attrs != '') {
         setAttributes(attrs, attrsObj);
       }
-      // tabPlus(nestingLevel,tabs)
 
       if (parent) {
         var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
@@ -116,11 +112,8 @@ function activate(context) {
 
     if (classValue.match(/\s/g)) {
       var classes = classValue.split(' ');
-
       classes.filter(element => element != '');
-
       classValue = classes[0];
-      // console.log(classValue);
     }
 
     let varableName = classValue;
@@ -128,7 +121,6 @@ function activate(context) {
       const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
       varableName = varableName.substring(lengthOfDigits);
     }
-    // console.log(varableName);
 
     if (varableName.match(/-/g)) {
       varableName = varableName.split('-');
@@ -193,7 +185,6 @@ function activate(context) {
       arr.push(varable);
     }
   }
-  // =====================================================
 
   function buttonAllCorrect(item, arr) {
     let keys = Object.keys(item.attrs);
@@ -374,11 +365,8 @@ function activate(context) {
 
               if (classValue.match(/\s/g)) {
                 var classes = classValue.split(' ');
-
                 classes.filter(element => element != '');
-
                 classValue = classes[0];
-                // console.log(classValue);
               }
 
               let varableName = classValue;
@@ -386,7 +374,6 @@ function activate(context) {
                 const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
-              // console.log(varableName);
 
               if (varableName.match(/-/g)) {
                 varableName = varableName.split('-');
@@ -401,8 +388,6 @@ function activate(context) {
 
               let varable = `${varableName} = document.querySelector('.${classValue}')`;
               declarations.push(varable);
-
-              //
             }
           } else if (result == 'tagName') {
             let varable = `${item.tagName} = document.querySelector('${item.tagName}')`;
@@ -483,11 +468,8 @@ function activate(context) {
 
               if (classValue.match(/\s/g)) {
                 var classes = classValue.split(' ');
-
                 classes.filter(element => element != '');
-
                 classValue = classes[0];
-                // console.log(classValue);
               }
 
               let varableName = classValue;
@@ -495,7 +477,6 @@ function activate(context) {
                 const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
-              // console.log(varableName);
 
               if (varableName.match(/-/g)) {
                 varableName = varableName.split('-');
@@ -510,8 +491,6 @@ function activate(context) {
 
               let varable = `${varableName}s = document.getElementsByClassName('${classValue}')`;
               declarations.push(varable);
-
-              //
             }
           } else if (result == 'name') {
             if (item.attrs[result]) {
@@ -846,8 +825,6 @@ function activate(context) {
           }
         });
 
-        // const tab = '    '
-
         const tab = '**';
         htmlObjs.forEach(item => {
           var tabs = '';
@@ -1009,8 +986,6 @@ function activate(context) {
           ],
           {},
         );
-
-        // await vscode.window.showInformationMessage(`${result}`);
 
         let html = document.getText(selection);
         // =====================================================
