@@ -87,16 +87,13 @@ function activate(context) {
   }
 
   function checkIdVarName(idValue) {
-    // Select without quotes
     let varableName = idValue.replace(/"/g, '');
-    // =====================================================
-    // If idValue beifin with numbers
+    
     if (varableName.match(/^\d+/m)) {
       const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
       varableName = varableName.substring(lengthOfDigits);
     }
-    // =====================================================
-    // If idValue separated with -
+    
     if (varableName.match(/-/g)) {
       varableName = varableName.split('-');
       for (let j = 1; j < varableName.length; j++) {
@@ -246,14 +243,11 @@ function activate(context) {
       let htmlObjs = [];
       const editor = vscode.window.activeTextEditor;
       if (editor) {
-        // =====================================================
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        // =====================================================
         html = html.match(/<.+?>/g).join('');
         var root = HTMLParser.parse(html);
-        // =====================================================
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -261,7 +255,6 @@ function activate(context) {
         let createElement = [];
         htmlObjs.forEach(item => {
           createElement.push(`const ${item.tagName} = document.createElement('${item.tagName}')`);
-          // setAtt       ribute("${key}",${item.attrs[key]})`)
           for (const key in item.attrs) {
             if (key == 'class') {
               if (item.attrs[key].match(/\s/g)) {
@@ -278,9 +271,6 @@ function activate(context) {
           }
 
           if (item.parentEl) {
-            /* for (const key in item.parent.attrs) {
-                            
-                        } */
             var keys = Object.keys(item.parentEl.attrs);
 
             if (keys.includes('id')) {
@@ -328,10 +318,8 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        // =====================================================
         html = html.match(/<.+?>/g).join('');
         var root = HTMLParser.parse(html);
-        // =====================================================
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -342,12 +330,10 @@ function activate(context) {
           if (result == 'id') {
             if (item.attrs[result]) {
               let varableName = item.attrs[result].replace(/"/g, '');
-              // =====================================================
               if (varableName.match(/^\d+/m)) {
                 const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
-              // =====================================================
               if (varableName.match(/-/g)) {
                 varableName = varableName.split('-');
                 for (let j = 1; j < varableName.length; j++) {
@@ -355,7 +341,6 @@ function activate(context) {
                 }
                 varableName = varableName.join('');
               }
-              // =====================================================
               let varable = `${varableName} = document.getElementById('${item.attrs[result].replace(/"/g, '')}')`;
               declarations.push(varable);
             }
@@ -431,10 +416,8 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        // =====================================================
         html = html.match(/<.+?>/g).join('');
         var root = HTMLParser.parse(html);
-        // =====================================================
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -445,12 +428,10 @@ function activate(context) {
           if (result == 'id') {
             if (item.attrs[result]) {
               let varableName = item.attrs[result].replace(/"/g, '');
-              // =====================================================
               if (varableName.match(/^\d+/m)) {
                 const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
-              // =====================================================
               if (varableName.match(/-/g)) {
                 varableName = varableName.split('-');
                 for (let j = 1; j < varableName.length; j++) {
@@ -458,7 +439,6 @@ function activate(context) {
                 }
                 varableName = varableName.join('');
               }
-              // =====================================================
               let varable = `${varableName}s = document.querySelectorAll('#${item.attrs[result].replace(/"/g, '')}')`;
               declarations.push(varable);
             }
@@ -495,12 +475,10 @@ function activate(context) {
           } else if (result == 'name') {
             if (item.attrs[result]) {
               let varableName = item.attrs[result].replace(/"/g, '');
-              // =====================================================
               if (varableName.match(/^\d+/m)) {
                 const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
-              // =====================================================
               if (varableName.match(/-/g)) {
                 varableName = varableName.split('-');
                 for (let j = 1; j < varableName.length; j++) {
@@ -508,7 +486,6 @@ function activate(context) {
                 }
                 varableName = varableName.join('');
               }
-              // =====================================================
               let varable = `${varableName}s = document.getElementsByName('${item.attrs[result].replace(/"/g, '')}')`;
               declarations.push(varable);
             }
@@ -556,10 +533,8 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        // =====================================================
         html = html.match(/<.+?>/g).join('');
         var root = HTMLParser.parse(html);
-        // =====================================================
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -567,9 +542,7 @@ function activate(context) {
         htmlObjs.forEach(item => {
           const keys = Object.keys(item.attrs);
           if (keys.includes('id')) {
-            // =====================================================
             let varableName = checkIdVarName(item.attrs['id']);
-            // =====================================================
             if (item.parentEl) {
               var tagNameOfParent = item.parentEl.tagName;
 
@@ -611,7 +584,6 @@ function activate(context) {
               declarations.push(varable);
             }
 
-            // =====================================================
           } else if (keys.includes('class')) {
             let varableName = checkClassVarName(item.attrs['class']);
 
@@ -619,7 +591,6 @@ function activate(context) {
               var tagNameOfParent = item.parentEl.tagName;
 
               if (Object.keys(item.parentEl.attrs).length != 0) {
-                // =====================================================
                 var attrsOfParent = item.parentEl.attrs;
                 var keysOfParent = Object.keys(attrsOfParent);
 
@@ -645,7 +616,6 @@ function activate(context) {
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}.${childClassAttrsV}')`;
                   declarations.push(varable);
                 }
-                // =====================================================
               } else {
                 let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}.${item.attrs[
                   'class'
@@ -736,10 +706,8 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        // =====================================================
         html = html.match(/<.+?>/g).join('');
         var root = HTMLParser.parse(html);
-        // =====================================================
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -799,10 +767,8 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        // =====================================================
         html = html.match(/<.+?>/g).join('');
         var root = HTMLParser.parse(html);
-        // =====================================================
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -858,9 +824,7 @@ function activate(context) {
       let htmlObjs = [];
       let declarations = [];
       const editor = vscode.window.activeTextEditor;
-      // =====================================================
       if (editor) {
-        // =====================================================
         const document = editor.document;
         const selection = editor.selection;
 
@@ -988,11 +952,8 @@ function activate(context) {
         );
 
         let html = document.getText(selection);
-        // =====================================================
-        // =====================================================
         html = html.match(/<.+?>/g).join('');
         var root = HTMLParser.parse(html);
-        // =====================================================
 
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
