@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-var HTMLParser = require('node-html-parser');
+let HTMLParser = require('node-html-parser');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -25,7 +25,7 @@ function activate(context) {
   }
 
   function tabPlus(nestingLevel, tabs) {
-    var tab = '    ';
+    let tab = '    ';
     for (let i = 0; i < nestingLevel; i++) {
       tabs += tab;
     }
@@ -34,7 +34,7 @@ function activate(context) {
 
   function setAttributes(attrs, attrsObj) {
     for (let i = 0; i < attrs.match(/([a-zA-Z\d-_]+)(?==)/g).length; i++) {
-      var attributeName = attrs.match(/([a-zA-Z\d-_]+)(?==)/g)[i],
+      let attributeName = attrs.match(/([a-zA-Z\d-_]+)(?==)/g)[i],
         attributeValue = attrs.match(/".+?"/g)[i];
 
       attrsObj[attributeName] = attributeValue;
@@ -43,29 +43,29 @@ function activate(context) {
 
   function nesting(htmlEl, arr, nestingLevel, parent) {
     if (htmlEl.childNodes == 0) {
-      var tagName = htmlEl.rawTagName;
+      let tagName = htmlEl.rawTagName;
       (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = '');
       if (attrs != '') {
         setAttributes(attrs, attrsObj);
       }
       if (parent) {
-        var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
+        let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
 
         arr.push(tag);
       } else {
-        var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel);
+        let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel);
 
         arr.push(tag);
       }
     } else {
-      var tagName = htmlEl.rawTagName;
+      let tagName = htmlEl.rawTagName;
       (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = '');
       if (attrs != '') {
         setAttributes(attrs, attrsObj);
       }
 
       if (parent) {
-        var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
+        let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
 
         arr.push(tag);
 
@@ -75,7 +75,7 @@ function activate(context) {
           nesting(htmlEl.childNodes[i], arr, nestingLevel, parentEl);
         }
       } else {
-        var tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
+        let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
         arr.push(tag);
         let parentEl = new parentElement(tagName, attrsObj);
         nestingLevel++;
@@ -108,7 +108,7 @@ function activate(context) {
     classValue = classValue.replace(/"/g, '');
 
     if (classValue.match(/\s/g)) {
-      var classes = classValue.split(' ');
+      let classes = classValue.split(' ');
       classes.filter(element => element != '');
       classValue = classes[0];
     }
@@ -136,31 +136,31 @@ function activate(context) {
   function buttonCorrect(item, arr) {
     let keys = Object.keys(item.attrs);
     if (keys.includes('id')) {
-      var varableName = checkIdVarName(item.attrs['id']);
-      var btnId = item.attrs['id'].replace(/"/g, '');
+      let varableName = checkIdVarName(item.attrs['id']);
+      let btnId = item.attrs['id'].replace(/"/g, '');
 
-      var varable = `btn${varableName} = document.querySelector('${item.tagName}#${btnId}')`;
+      let varable = `btn${varableName} = document.querySelector('${item.tagName}#${btnId}')`;
       arr.push(varable);
     } else if (keys.includes('type')) {
-      var varableName = checkIdVarName(item.attrs['type']);
-      var btnType = item.attrs['type'];
+      let varableName = checkIdVarName(item.attrs['type']);
+      let btnType = item.attrs['type'];
 
-      var varable = `btn${varableName} = document.querySelector('${item.tagName}[type="${btnType}"]')`;
+      let varable = `btn${varableName} = document.querySelector('${item.tagName}[type="${btnType}"]')`;
       arr.push(varable);
     } else if (keys.includes('value')) {
-      var varableName = checkIdVarName(item.attrs['value']);
-      var btnValue = item.attrs['value'];
+      let varableName = checkIdVarName(item.attrs['value']);
+      let btnValue = item.attrs['value'];
 
-      var varable = `btn${varableName} = document.querySelector('${item.tagName}[value="${btnValue}"]')`;
+      let varable = `btn${varableName} = document.querySelector('${item.tagName}[value="${btnValue}"]')`;
       arr.push(varable);
     } else if (keys.includes('name')) {
-      var varableName = checkIdVarName(item.attrs['name']);
-      var btnName = item.attrs['name'];
+      let varableName = checkIdVarName(item.attrs['name']);
+      let btnName = item.attrs['name'];
 
-      var varable = `btn${varableName} = document.querySelector('${item.tagName}[name="${btnName}"]')`;
+      let varable = `btn${varableName} = document.querySelector('${item.tagName}[name="${btnName}"]')`;
       arr.push(varable);
     } else {
-      var varable = `btn = document.querySelector('${item.tagName}')`;
+      let varable = `btn = document.querySelector('${item.tagName}')`;
       arr.push(varable);
     }
   }
@@ -186,31 +186,31 @@ function activate(context) {
   function buttonAllCorrect(item, arr) {
     let keys = Object.keys(item.attrs);
     if (keys.includes('id')) {
-      var varableName = checkIdVarName(item.attrs['id']);
-      var btnId = item.attrs['id'].replace(/"/g, '');
+      let varableName = checkIdVarName(item.attrs['id']);
+      let btnId = item.attrs['id'].replace(/"/g, '');
 
-      var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}#${btnId}')`;
+      let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}#${btnId}')`;
       arr.push(varable);
     } else if (keys.includes('type')) {
-      var varableName = checkIdVarName(item.attrs['type']);
-      var btnType = item.attrs['type'];
+      let varableName = checkIdVarName(item.attrs['type']);
+      let btnType = item.attrs['type'];
 
-      var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[type="${btnType}"]')`;
+      let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[type="${btnType}"]')`;
       arr.push(varable);
     } else if (keys.includes('value')) {
-      var varableName = checkIdVarName(item.attrs['value']);
-      var btnValue = item.attrs['value'];
+      let varableName = checkIdVarName(item.attrs['value']);
+      let btnValue = item.attrs['value'];
 
-      var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[value="${btnValue}"]')`;
+      let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[value="${btnValue}"]')`;
       arr.push(varable);
     } else if (keys.includes('name')) {
-      var varableName = checkIdVarName(item.attrs['name']);
-      var btnName = item.attrs['name'];
+      let varableName = checkIdVarName(item.attrs['name']);
+      let btnName = item.attrs['name'];
 
-      var varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[name="${btnName}"]')`;
+      let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[name="${btnName}"]')`;
       arr.push(varable);
     } else {
-      var varable = `btns = document.getElementsByTagName('${item.tagName}')`;
+      let varable = `btns = document.getElementsByTagName('${item.tagName}')`;
       arr.push(varable);
     }
   }
@@ -247,7 +247,7 @@ function activate(context) {
         const selection = editor.selection;
         let html = document.getText(selection);
         html = html.match(/<.+?>/g).join('');
-        var root = HTMLParser.parse(html);
+        let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -258,7 +258,7 @@ function activate(context) {
           for (const key in item.attrs) {
             if (key == 'class') {
               if (item.attrs[key].match(/\s/g)) {
-                var classes = item.attrs[key].replace(/"/g, '').split(' ');
+                let classes = item.attrs[key].replace(/"/g, '').split(' ');
                 for (let i = 0; i < classes.length; i++) {
                   createElement.push(`${item.tagName}.classList.add("${classes[i]}")`);
                 }
@@ -271,7 +271,7 @@ function activate(context) {
           }
 
           if (item.parentEl) {
-            var keys = Object.keys(item.parentEl.attrs);
+            let keys = Object.keys(item.parentEl.attrs);
 
             if (keys.includes('id')) {
               createElement.push(
@@ -282,12 +282,12 @@ function activate(context) {
               );
             } else if (keys.includes('class')) {
               if (item.parentEl.attrs['class'].match(/\s/g)) {
-                var fstClass = item.parentEl.attrs['class'].replace(/"/g, '').split(' ')[0];
+                let fstClass = item.parentEl.attrs['class'].replace(/"/g, '').split(' ')[0];
                 createElement.push(
                   `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
                 );
               } else {
-                var fstClass = item.parentEl.attrs['class'].replace(/"/g, '');
+                let fstClass = item.parentEl.attrs['class'].replace(/"/g, '');
                 createElement.push(
                   `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
                 );
@@ -319,7 +319,7 @@ function activate(context) {
         const selection = editor.selection;
         let html = document.getText(selection);
         html = html.match(/<.+?>/g).join('');
-        var root = HTMLParser.parse(html);
+        let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -349,7 +349,7 @@ function activate(context) {
               let classValue = item.attrs[result].replace(/"/g, '');
 
               if (classValue.match(/\s/g)) {
-                var classes = classValue.split(' ');
+                let classes = classValue.split(' ');
                 classes.filter(element => element != '');
                 classValue = classes[0];
               }
@@ -381,7 +381,7 @@ function activate(context) {
         });
         const tab = '**';
         htmlObjs.forEach(item => {
-          var tabs = '';
+          let tabs = '';
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
@@ -417,7 +417,7 @@ function activate(context) {
         const selection = editor.selection;
         let html = document.getText(selection);
         html = html.match(/<.+?>/g).join('');
-        var root = HTMLParser.parse(html);
+        let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -447,7 +447,7 @@ function activate(context) {
               let classValue = item.attrs[result].replace(/"/g, '');
 
               if (classValue.match(/\s/g)) {
-                var classes = classValue.split(' ');
+                let classes = classValue.split(' ');
                 classes.filter(element => element != '');
                 classValue = classes[0];
               }
@@ -497,7 +497,7 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          var tabs = '';
+          let tabs = '';
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
@@ -534,7 +534,7 @@ function activate(context) {
         const selection = editor.selection;
         let html = document.getText(selection);
         html = html.match(/<.+?>/g).join('');
-        var root = HTMLParser.parse(html);
+        let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -544,35 +544,35 @@ function activate(context) {
           if (keys.includes('id')) {
             let varableName = checkIdVarName(item.attrs['id']);
             if (item.parentEl) {
-              var tagNameOfParent = item.parentEl.tagName;
+              let tagNameOfParent = item.parentEl.tagName;
 
               if (Object.keys(item.parentEl.attrs).length != 0) {
-                var attrsOfParent = item.parentEl.attrs;
-                var keysOfParent = Object.keys(attrsOfParent);
+                let attrsOfParent = item.parentEl.attrs;
+                let keysOfParent = Object.keys(attrsOfParent);
                 if (keysOfParent.includes('id')) {
-                  var parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
-                  var childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+                  let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
+                  let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}#${childIdAttrsV}')`;
                   declarations.push(varable);
                 } else if (keysOfParent.includes('class')) {
-                  var parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+                  let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
 
                   if (parentclassAttrsV.match(/\s/g)) {
-                    var classes = parentclassAttrsV.split(' ');
+                    let classes = parentclassAttrsV.split(' ');
 
                     classes.filter(element => element != '');
 
                     parentclassAttrsV = classes[0];
                   }
 
-                  var childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+                  let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}#${childIdAttrsV}')`;
                   declarations.push(varable);
                 }
               } else {
-                var childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+                let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
                 let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}#${childIdAttrsV}')`;
                 declarations.push(varable);
               }
@@ -588,30 +588,30 @@ function activate(context) {
             let varableName = checkClassVarName(item.attrs['class']);
 
             if (item.parentEl) {
-              var tagNameOfParent = item.parentEl.tagName;
+              let tagNameOfParent = item.parentEl.tagName;
 
               if (Object.keys(item.parentEl.attrs).length != 0) {
-                var attrsOfParent = item.parentEl.attrs;
-                var keysOfParent = Object.keys(attrsOfParent);
+                let attrsOfParent = item.parentEl.attrs;
+                let keysOfParent = Object.keys(attrsOfParent);
 
                 if (keysOfParent.includes('id')) {
-                  var parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
-                  var childClassAttrsV = item.attrs['class'].replace(/"/g, '');
+                  let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
+                  let childClassAttrsV = item.attrs['class'].replace(/"/g, '');
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}.${childClassAttrsV}')`;
                   declarations.push(varable);
                 } else if (keysOfParent.includes('class')) {
-                  var parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+                  let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
 
                   if (parentclassAttrsV.match(/\s/g)) {
-                    var classes = parentclassAttrsV.split(' ');
+                    let classes = parentclassAttrsV.split(' ');
 
                     classes.filter(element => element != '');
 
                     parentclassAttrsV = classes[0];
                   }
 
-                  var childClassAttrsV = item.attrs['class'].replace(/"/g, '');
+                  let childClassAttrsV = item.attrs['class'].replace(/"/g, '');
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}.${childClassAttrsV}')`;
                   declarations.push(varable);
@@ -633,22 +633,22 @@ function activate(context) {
             let varableName = item.tagName;
 
             if (item.parentEl) {
-              var tagNameOfParent = item.parentEl.tagName;
+              let tagNameOfParent = item.parentEl.tagName;
               if (Object.keys(item.parentEl.attrs).length != 0) {
-                var attrsOfParent = item.parentEl.attrs;
+                let attrsOfParent = item.parentEl.attrs;
 
-                var keysOfParent = Object.keys(attrsOfParent);
+                let keysOfParent = Object.keys(attrsOfParent);
 
                 if (keysOfParent.includes('id')) {
-                  var parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
+                  let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}')`;
                   declarations.push(varable);
                 } else if (keysOfParent.includes('class')) {
-                  var parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+                  let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
 
                   if (parentclassAttrsV.match(/\s/g)) {
-                    var classes = parentclassAttrsV.split(' ');
+                    let classes = parentclassAttrsV.split(' ');
 
                     classes.filter(element => element != '');
 
@@ -671,7 +671,7 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          var tabs = '';
+          let tabs = '';
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
@@ -707,7 +707,7 @@ function activate(context) {
         const selection = editor.selection;
         let html = document.getText(selection);
         html = html.match(/<.+?>/g).join('');
-        var root = HTMLParser.parse(html);
+        let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -721,10 +721,10 @@ function activate(context) {
             }
           } else {
             if (item.tagName == 'button') {
-              var varable = `btn = document.querySelector('${item.tagName}')`;
+              let varable = `btn = document.querySelector('${item.tagName}')`;
               declarations.push(varable);
             } else {
-              var varable = `${item.tagName} = document.querySelector('${item.tagName}')`;
+              let varable = `${item.tagName} = document.querySelector('${item.tagName}')`;
               declarations.push(varable);
             }
           }
@@ -732,7 +732,7 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          var tabs = '';
+          let tabs = '';
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
@@ -768,7 +768,7 @@ function activate(context) {
         const selection = editor.selection;
         let html = document.getText(selection);
         html = html.match(/<.+?>/g).join('');
-        var root = HTMLParser.parse(html);
+        let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
         });
@@ -782,10 +782,10 @@ function activate(context) {
             }
           } else {
             if (item.tagName == 'button') {
-              var varable = `btns = document.getElementsByTagName('${item.tagName}')`;
+              let varable = `btns = document.getElementsByTagName('${item.tagName}')`;
               declarations.push(varable);
             } else {
-              var varable = `${item.tagName}s = document.getElementsByTagName('${item.tagName}')`;
+              let varable = `${item.tagName}s = document.getElementsByTagName('${item.tagName}')`;
               declarations.push(varable);
             }
           }
@@ -793,7 +793,7 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          var tabs = '';
+          let tabs = '';
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
@@ -953,7 +953,7 @@ function activate(context) {
 
         let html = document.getText(selection);
         html = html.match(/<.+?>/g).join('');
-        var root = HTMLParser.parse(html);
+        let root = HTMLParser.parse(html);
 
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
@@ -964,7 +964,7 @@ function activate(context) {
         });
 
         for (let i = 0; i < declarations.length; i++) {
-          var declare = declarations[i].match(/([a-zA-Z\d-_]+)(?=\s=)/g)[0];
+          let declare = declarations[i].match(/([a-zA-Z\d-_]+)(?=\s=)/g)[0];
 
           declarations[i] = `const ${declarations[i]}
 function ${result}On${declare[0].toUpperCase() + declare.substring(1)}(event) {
