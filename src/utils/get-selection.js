@@ -1,7 +1,12 @@
 const vscode = require('vscode');
 let htmlParser = require('node-html-parser');
 
-module.exports = function getSelection () {
+
+/**
+ * Get selection from editor and parse HTML
+ * @returns {htmlParser.HTMLElement}
+ */
+function getSelection () {
   const editor = vscode.window.activeTextEditor,
     document = editor.document,
     selection = editor.selection;
@@ -11,3 +16,5 @@ module.exports = function getSelection () {
 
   return root;
 }
+
+module.exports = getSelection;
