@@ -24,14 +24,6 @@ function activate(context) {
     }
   }
 
-  function tabPlus(nestingLevel, tabs) {
-    let tab = '    ';
-    for (let i = 0; i < nestingLevel; i++) {
-      tabs += tab;
-    }
-    return tabs;
-  }
-
   function setAttributes(attrs, attrsObj) {
     for (let i = 0; i < attrs.match(/([a-zA-Z\d-_]+)(?==)/g).length; i++) {
       let attributeName = attrs.match(/([a-zA-Z\d-_]+)(?==)/g)[i],
