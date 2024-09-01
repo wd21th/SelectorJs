@@ -1,7 +1,6 @@
 const vscode = require('vscode');
 let htmlParser = require('node-html-parser');
 
-
 /**
  * Get selection from editor and parse HTML
  * @returns {htmlParser.HTMLElement}
