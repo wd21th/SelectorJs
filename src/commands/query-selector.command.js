@@ -1,4 +1,8 @@
-module.exports = function querySelectorCommand () {
+/**
+ * Description
+ * @returns {any}
+ */
+function querySelectorCommand () {
   let htmlObjs = [];
   let declarations = [];
   const editor = vscode.window.activeTextEditor;
@@ -56,3 +60,5 @@ module.exports = function querySelectorCommand () {
     });
   }
 }
+
+module.exports = querySelectorCommand;

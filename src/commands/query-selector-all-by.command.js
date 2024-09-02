@@ -1,4 +1,8 @@
-module.exports = function querySelectorAllByCommand () {
+/**
+ * Description
+ * @returns {any}
+ */
+function querySelectorAllByCommand () {
   let htmlObjs = [];
   let declarations = [];
   const editor = vscode.window.activeTextEditor;
@@ -37,7 +41,7 @@ module.exports = function querySelectorAllByCommand () {
           let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
           if (classValue.match(/\s/g)) {
-            let classes = classValue.split(space);
+            let classes = classValue.split(' ');
             classes.filter(element => element != emptySpace);
             classValue = classes[0];
           }
@@ -112,3 +116,5 @@ module.exports = function querySelectorAllByCommand () {
     });
   }
 }
+
+module.exports = querySelectorAllByCommand;

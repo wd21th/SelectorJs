@@ -1,4 +1,8 @@
-module.exports = function querySelectorWithDetailsCommand () {
+/**
+ * Description
+ * @returns {any}
+ */
+function querySelectorWithDetailsCommand () {
   let htmlObjs = [];
   let declarations = [];
   const editor = vscode.window.activeTextEditor;
@@ -32,7 +36,7 @@ module.exports = function querySelectorWithDetailsCommand () {
               let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
               if (parentclassAttrsV.match(/\s/g)) {
-                let classes = parentclassAttrsV.split(space);
+                let classes = parentclassAttrsV.split(' ');
 
                 classes.filter(element => element != emptySpace);
 
@@ -77,7 +81,7 @@ module.exports = function querySelectorWithDetailsCommand () {
               let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
               if (parentclassAttrsV.match(/\s/g)) {
-                let classes = parentclassAttrsV.split(space);
+                let classes = parentclassAttrsV.split(' ');
 
                 classes.filter(element => element != emptySpace);
 
@@ -121,7 +125,7 @@ module.exports = function querySelectorWithDetailsCommand () {
               let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
               if (parentclassAttrsV.match(/\s/g)) {
-                let classes = parentclassAttrsV.split(space);
+                let classes = parentclassAttrsV.split(' ');
 
                 classes.filter(element => element != emptySpace);
 
@@ -168,3 +172,5 @@ module.exports = function querySelectorWithDetailsCommand () {
     });
   }
 }
+
+module.exports = querySelectorWithDetailsCommand;

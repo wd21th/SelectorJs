@@ -1,4 +1,8 @@
-module.exports = function createElementCommand () {
+/**
+ * Description
+ * @returns {any}
+ */
+function createElementCommand () {
   let htmlObjs = [];
   const editor = vscode.window.activeTextEditor;
   if (editor) {
@@ -17,7 +21,7 @@ module.exports = function createElementCommand () {
       for (const key in item.attrs) {
         if (key == 'class') {
           if (item.attrs[key].match(/\s/g)) {
-            let classes = item.attrs[key].replace(allDoubleQuotes, emptySpace).split(space);
+            let classes = item.attrs[key].replace(allDoubleQuotes, emptySpace).split(' ');
             for (let i = 0; i < classes.length; i++) {
               createElement.push(`${item.tagName}.classList.add("${classes[i]}")`);
             }
@@ -41,7 +45,7 @@ module.exports = function createElementCommand () {
           );
         } else if (keys.includes('class')) {
           if (item.parentEl.attrs['class'].match(/\s/g)) {
-            let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace).split(space)[0];
+            let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace).split(' ')[0];
             createElement.push(
               `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
             );
@@ -66,3 +70,5 @@ module.exports = function createElementCommand () {
     });
   }
 }
+
+module.exports = createElementCommand;

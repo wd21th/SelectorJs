@@ -1,4 +1,8 @@
-module.exports = function querySelectorWithEventCommand () {
+/**
+ * Description
+ * @returns {any}
+ */
+function querySelectorWithEventCommand () {
   let htmlObjs = [];
   let declarations = [];
   const editor = vscode.window.activeTextEditor;
@@ -157,3 +161,5 @@ ${declare}.addEventListener("${result}", ${result}On${declare[0].toUpperCase() +
     });
   }
 }
+
+module.exports = querySelectorWithEventCommand;
