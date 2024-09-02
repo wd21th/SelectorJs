@@ -6,7 +6,7 @@ module.exports = function querySelectorAllByCommand () {
     const document = editor.document;
     const selection = editor.selection;
     let html = document.getText(selection);
-    html = html.match(/<.+?>/g).join('');
+    html = html.match(contentBetweenAngleBrackets).join(emptySpace);
     let root = HTMLParser.parse(html);
     root.childNodes.forEach(item => {
       nesting(item, htmlObjs, 0, null);
@@ -17,46 +17,46 @@ module.exports = function querySelectorAllByCommand () {
     htmlObjs.forEach(item => {
       if (result == 'id') {
         if (item.attrs[result]) {
-          let varableName = item.attrs[result].replace(/"/g, '');
-          if (varableName.match(/^\d+/m)) {
-            const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+          let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
+          if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+            const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
             varableName = varableName.substring(lengthOfDigits);
           }
           if (varableName.match(/-/g)) {
-            varableName = varableName.split('-');
+            varableName = varableName.split(hyphen);
             for (let j = 1; j < varableName.length; j++) {
               varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
             }
-            varableName = varableName.join('');
+            varableName = varableName.join(emptySpace);
           }
-          let varable = `${varableName}s = document.querySelectorAll('#${item.attrs[result].replace(/"/g, '')}')`;
+          let varable = `${varableName}s = document.querySelectorAll('#${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
           declarations.push(varable);
         }
       } else if (result == 'class') {
         if (item.attrs[result]) {
-          let classValue = item.attrs[result].replace(/"/g, '');
+          let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
           if (classValue.match(/\s/g)) {
-            let classes = classValue.split(' ');
-            classes.filter(element => element != '');
+            let classes = classValue.split(space);
+            classes.filter(element => element != emptySpace);
             classValue = classes[0];
           }
 
           let varableName = classValue;
-          if (varableName.match(/^\d+/m)) {
-            const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+          if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+            const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
             varableName = varableName.substring(lengthOfDigits);
           }
 
           if (varableName.match(/-/g)) {
-            varableName = varableName.split('-');
+            varableName = varableName.split(hyphen);
 
-            varableName.filter(element => element != '');
+            varableName.filter(element => element != emptySpace);
 
             for (let j = 1; j < varableName.length; j++) {
               varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
             }
-            varableName = varableName.join('');
+            varableName = varableName.join(emptySpace);
           }
 
           let varable = `${varableName}s = document.getElementsByClassName('${classValue}')`;
@@ -64,19 +64,19 @@ module.exports = function querySelectorAllByCommand () {
         }
       } else if (result == 'name') {
         if (item.attrs[result]) {
-          let varableName = item.attrs[result].replace(/"/g, '');
-          if (varableName.match(/^\d+/m)) {
-            const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+          let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
+          if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+            const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
             varableName = varableName.substring(lengthOfDigits);
           }
           if (varableName.match(/-/g)) {
-            varableName = varableName.split('-');
+            varableName = varableName.split(hyphen);
             for (let j = 1; j < varableName.length; j++) {
               varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
             }
-            varableName = varableName.join('');
+            varableName = varableName.join(emptySpace);
           }
-          let varable = `${varableName}s = document.getElementsByName('${item.attrs[result].replace(/"/g, '')}')`;
+          let varable = `${varableName}s = document.getElementsByName('${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
           declarations.push(varable);
         }
       } else if (result == 'tagName') {
@@ -87,11 +87,11 @@ module.exports = function querySelectorAllByCommand () {
 
     const tab = '**';
     htmlObjs.forEach(item => {
-      let tabs = '';
+      let tabs = emptySpace;
       for (let i = 0; i < item.nestingLevel; i++) {
         tabs += tab;
       }
-      if (tabs != '') {
+      if (tabs != emptySpace) {
         item.tabSize = '/' + tabs + '/';
       }
     });

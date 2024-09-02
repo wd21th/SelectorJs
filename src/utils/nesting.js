@@ -9,8 +9,8 @@
 function nesting (htmlEl, arr, nestingLevel, parent) {
   if (htmlEl.childNodes == 0) {
     let tagName = htmlEl.rawTagName;
-    (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = '');
-    if (attrs != '') {
+    (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = emptySpace);
+    if (attrs != emptySpace) {
       setAttributes(attrs, attrsObj);
     }
     if (parent) {
@@ -24,8 +24,8 @@ function nesting (htmlEl, arr, nestingLevel, parent) {
     }
   } else {
     let tagName = htmlEl.rawTagName;
-    (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = '');
-    if (attrs != '') {
+    (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = emptySpace);
+    if (attrs != emptySpace) {
       setAttributes(attrs, attrsObj);
     }
 

@@ -5,7 +5,7 @@ module.exports = function createElementCommand () {
     const document = editor.document;
     const selection = editor.selection;
     let html = document.getText(selection);
-    html = html.match(/<.+?>/g).join('');
+    html = html.match(contentBetweenAngleBrackets).join(emptySpace);
     let root = HTMLParser.parse(html);
     root.childNodes.forEach(item => {
       nesting(item, htmlObjs, 0, null);
@@ -17,12 +17,12 @@ module.exports = function createElementCommand () {
       for (const key in item.attrs) {
         if (key == 'class') {
           if (item.attrs[key].match(/\s/g)) {
-            let classes = item.attrs[key].replace(/"/g, '').split(' ');
+            let classes = item.attrs[key].replace(allDoubleQuotes, emptySpace).split(space);
             for (let i = 0; i < classes.length; i++) {
               createElement.push(`${item.tagName}.classList.add("${classes[i]}")`);
             }
           } else {
-            createElement.push(`${item.tagName}.classList.add("${item.attrs[key].replace(/"/g, '')}")`);
+            createElement.push(`${item.tagName}.classList.add("${item.attrs[key].replace(allDoubleQuotes, emptySpace)}")`);
           }
         } else {
           createElement.push(`${item.tagName}.setAttribute("${key}",${item.attrs[key]})`);
@@ -35,18 +35,18 @@ module.exports = function createElementCommand () {
         if (keys.includes('id')) {
           createElement.push(
             `document.querySelector('${item.parentEl.tagName}#${item.parentEl.attrs['id'].replace(
-              /"/g,
-              '',
+              allDoubleQuotes,
+              emptySpace,
             )}').appendChild(${item.tagName})`,
           );
         } else if (keys.includes('class')) {
           if (item.parentEl.attrs['class'].match(/\s/g)) {
-            let fstClass = item.parentEl.attrs['class'].replace(/"/g, '').split(' ')[0];
+            let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace).split(space)[0];
             createElement.push(
               `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
             );
           } else {
-            let fstClass = item.parentEl.attrs['class'].replace(/"/g, '');
+            let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace);
             createElement.push(
               `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
             );
@@ -62,7 +62,7 @@ module.exports = function createElementCommand () {
     });
 
     editor.edit(editBuilder => {
-      editBuilder.replace(selection, createElement.join('\n'));
+      editBuilder.replace(selection, createElement.join(newLine));
     });
   }
 }

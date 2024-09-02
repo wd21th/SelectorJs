@@ -8,7 +8,7 @@ function buttonCorrect (item, arr) {
   let keys = Object.keys(item.attrs);
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
-    let btnId = item.attrs['id'].replace(/"/g, '');
+    let btnId = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
 
     let varable = `btn${varableName} = document.querySelector('${item.tagName}#${btnId}')`;
     arr.push(varable);

@@ -6,7 +6,7 @@ module.exports = function querySelectorAllCommand () {
     const document = editor.document;
     const selection = editor.selection;
     let html = document.getText(selection);
-    html = html.match(/<.+?>/g).join('');
+    html = html.match(contentBetweenAngleBrackets).join(emptySpace);
     let root = HTMLParser.parse(html);
     root.childNodes.forEach(item => {
       nesting(item, htmlObjs, 0, null);
@@ -32,11 +32,11 @@ module.exports = function querySelectorAllCommand () {
 
     const tab = '**';
     htmlObjs.forEach(item => {
-      let tabs = '';
+      let tabs = emptySpace;
       for (let i = 0; i < item.nestingLevel; i++) {
         tabs += tab;
       }
-      if (tabs != '') {
+      if (tabs != emptySpace) {
         item.tabSize = '/' + tabs + '/';
       }
     });

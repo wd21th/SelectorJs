@@ -10,7 +10,7 @@ function getSelection () {
     document = editor.document,
     selection = editor.selection;
   let html = document.getText(selection);
-  html = html.match(/<.+?>/g).join('');
+  html = html.match(contentBetweenAngleBrackets).join(emptySpace);
   let root = htmlParser.parse(html);
 
   return root;

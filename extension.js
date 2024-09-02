@@ -32,7 +32,7 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        html = html.match(/<.+?>/g).join('');
+        html = html.match(contentBetweenAngleBrackets).join(emptySpace);
         let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
@@ -44,12 +44,12 @@ function activate(context) {
           for (const key in item.attrs) {
             if (key == 'class') {
               if (item.attrs[key].match(/\s/g)) {
-                let classes = item.attrs[key].replace(/"/g, '').split(' ');
+                let classes = item.attrs[key].replace(allDoubleQuotes, emptySpace).split(space);
                 for (let i = 0; i < classes.length; i++) {
                   createElement.push(`${item.tagName}.classList.add("${classes[i]}")`);
                 }
               } else {
-                createElement.push(`${item.tagName}.classList.add("${item.attrs[key].replace(/"/g, '')}")`);
+                createElement.push(`${item.tagName}.classList.add("${item.attrs[key].replace(allDoubleQuotes, emptySpace)}")`);
               }
             } else {
               createElement.push(`${item.tagName}.setAttribute("${key}",${item.attrs[key]})`);
@@ -62,18 +62,18 @@ function activate(context) {
             if (keys.includes('id')) {
               createElement.push(
                 `document.querySelector('${item.parentEl.tagName}#${item.parentEl.attrs['id'].replace(
-                  /"/g,
-                  '',
+                  allDoubleQuotes,
+                  emptySpace,
                 )}').appendChild(${item.tagName})`,
               );
             } else if (keys.includes('class')) {
               if (item.parentEl.attrs['class'].match(/\s/g)) {
-                let fstClass = item.parentEl.attrs['class'].replace(/"/g, '').split(' ')[0];
+                let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace).split(space)[0];
                 createElement.push(
                   `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
                 );
               } else {
-                let fstClass = item.parentEl.attrs['class'].replace(/"/g, '');
+                let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace);
                 createElement.push(
                   `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
                 );
@@ -89,7 +89,7 @@ function activate(context) {
         });
 
         editor.edit(editBuilder => {
-          editBuilder.replace(selection, createElement.join('\n'));
+          editBuilder.replace(selection, createElement.join(newLine));
         });
       }
     }),
@@ -104,7 +104,7 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        html = html.match(/<.+?>/g).join('');
+        html = html.match(contentBetweenAngleBrackets).join(emptySpace);
         let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
@@ -115,46 +115,46 @@ function activate(context) {
         htmlObjs.forEach(item => {
           if (result == 'id') {
             if (item.attrs[result]) {
-              let varableName = item.attrs[result].replace(/"/g, '');
-              if (varableName.match(/^\d+/m)) {
-                const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+              let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
+              if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+                const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
               if (varableName.match(/-/g)) {
-                varableName = varableName.split('-');
+                varableName = varableName.split(hyphen);
                 for (let j = 1; j < varableName.length; j++) {
                   varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
                 }
-                varableName = varableName.join('');
+                varableName = varableName.join(emptySpace);
               }
-              let varable = `${varableName} = document.getElementById('${item.attrs[result].replace(/"/g, '')}')`;
+              let varable = `${varableName} = document.getElementById('${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
               declarations.push(varable);
             }
           } else if (result == 'class') {
             if (item.attrs[result]) {
-              let classValue = item.attrs[result].replace(/"/g, '');
+              let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
               if (classValue.match(/\s/g)) {
-                let classes = classValue.split(' ');
-                classes.filter(element => element != '');
+                let classes = classValue.split(space);
+                classes.filter(element => element != emptySpace);
                 classValue = classes[0];
               }
 
               let varableName = classValue;
-              if (varableName.match(/^\d+/m)) {
-                const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+              if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+                const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
 
               if (varableName.match(/-/g)) {
-                varableName = varableName.split('-');
+                varableName = varableName.split(hyphen);
 
-                varableName.filter(element => element != '');
+                varableName.filter(element => element != emptySpace);
 
                 for (let j = 1; j < varableName.length; j++) {
                   varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
                 }
-                varableName = varableName.join('');
+                varableName = varableName.join(emptySpace);
               }
 
               let varable = `${varableName} = document.querySelector('.${classValue}')`;
@@ -167,11 +167,11 @@ function activate(context) {
         });
         const tab = '**';
         htmlObjs.forEach(item => {
-          let tabs = '';
+          let tabs = emptySpace;
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
-          if (tabs != '') {
+          if (tabs != emptySpace) {
             item.tabSize = '/' + tabs + '/';
           }
         });
@@ -202,7 +202,7 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        html = html.match(/<.+?>/g).join('');
+        html = html.match(contentBetweenAngleBrackets).join(emptySpace);
         let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
@@ -213,46 +213,46 @@ function activate(context) {
         htmlObjs.forEach(item => {
           if (result == 'id') {
             if (item.attrs[result]) {
-              let varableName = item.attrs[result].replace(/"/g, '');
-              if (varableName.match(/^\d+/m)) {
-                const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+              let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
+              if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+                const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
               if (varableName.match(/-/g)) {
-                varableName = varableName.split('-');
+                varableName = varableName.split(hyphen);
                 for (let j = 1; j < varableName.length; j++) {
                   varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
                 }
-                varableName = varableName.join('');
+                varableName = varableName.join(emptySpace);
               }
-              let varable = `${varableName}s = document.querySelectorAll('#${item.attrs[result].replace(/"/g, '')}')`;
+              let varable = `${varableName}s = document.querySelectorAll('#${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
               declarations.push(varable);
             }
           } else if (result == 'class') {
             if (item.attrs[result]) {
-              let classValue = item.attrs[result].replace(/"/g, '');
+              let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
               if (classValue.match(/\s/g)) {
-                let classes = classValue.split(' ');
-                classes.filter(element => element != '');
+                let classes = classValue.split(space);
+                classes.filter(element => element != emptySpace);
                 classValue = classes[0];
               }
 
               let varableName = classValue;
-              if (varableName.match(/^\d+/m)) {
-                const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+              if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+                const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
 
               if (varableName.match(/-/g)) {
-                varableName = varableName.split('-');
+                varableName = varableName.split(hyphen);
 
-                varableName.filter(element => element != '');
+                varableName.filter(element => element != emptySpace);
 
                 for (let j = 1; j < varableName.length; j++) {
                   varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
                 }
-                varableName = varableName.join('');
+                varableName = varableName.join(emptySpace);
               }
 
               let varable = `${varableName}s = document.getElementsByClassName('${classValue}')`;
@@ -260,19 +260,19 @@ function activate(context) {
             }
           } else if (result == 'name') {
             if (item.attrs[result]) {
-              let varableName = item.attrs[result].replace(/"/g, '');
-              if (varableName.match(/^\d+/m)) {
-                const lengthOfDigits = varableName.match(/^\d+/m)[0].length;
+              let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
+              if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+                const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
                 varableName = varableName.substring(lengthOfDigits);
               }
               if (varableName.match(/-/g)) {
-                varableName = varableName.split('-');
+                varableName = varableName.split(hyphen);
                 for (let j = 1; j < varableName.length; j++) {
                   varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
                 }
-                varableName = varableName.join('');
+                varableName = varableName.join(emptySpace);
               }
-              let varable = `${varableName}s = document.getElementsByName('${item.attrs[result].replace(/"/g, '')}')`;
+              let varable = `${varableName}s = document.getElementsByName('${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
               declarations.push(varable);
             }
           } else if (result == 'tagName') {
@@ -283,11 +283,11 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          let tabs = '';
+          let tabs = emptySpace;
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
-          if (tabs != '') {
+          if (tabs != emptySpace) {
             item.tabSize = '/' + tabs + '/';
           }
         });
@@ -319,7 +319,7 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        html = html.match(/<.+?>/g).join('');
+        html = html.match(contentBetweenAngleBrackets).join(emptySpace);
         let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
@@ -336,36 +336,36 @@ function activate(context) {
                 let attrsOfParent = item.parentEl.attrs;
                 let keysOfParent = Object.keys(attrsOfParent);
                 if (keysOfParent.includes('id')) {
-                  let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
-                  let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+                  let parentIdAttrsV = attrsOfParent['id'].replace(allDoubleQuotes, emptySpace);
+                  let childIdAttrsV = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}#${childIdAttrsV}')`;
                   declarations.push(varable);
                 } else if (keysOfParent.includes('class')) {
-                  let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+                  let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
                   if (parentclassAttrsV.match(/\s/g)) {
-                    let classes = parentclassAttrsV.split(' ');
+                    let classes = parentclassAttrsV.split(space);
 
-                    classes.filter(element => element != '');
+                    classes.filter(element => element != emptySpace);
 
                     parentclassAttrsV = classes[0];
                   }
 
-                  let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+                  let childIdAttrsV = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}#${childIdAttrsV}')`;
                   declarations.push(varable);
                 }
               } else {
-                let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+                let childIdAttrsV = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
                 let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}#${childIdAttrsV}')`;
                 declarations.push(varable);
               }
             } else {
               let varable = `${varableName} = document.querySelector('${item.tagName}#${item.attrs['id'].replace(
-                /"/g,
-                '',
+                allDoubleQuotes,
+                emptySpace,
               )}')`;
               declarations.push(varable);
             }
@@ -381,23 +381,23 @@ function activate(context) {
                 let keysOfParent = Object.keys(attrsOfParent);
 
                 if (keysOfParent.includes('id')) {
-                  let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
-                  let childClassAttrsV = item.attrs['class'].replace(/"/g, '');
+                  let parentIdAttrsV = attrsOfParent['id'].replace(allDoubleQuotes, emptySpace);
+                  let childClassAttrsV = item.attrs['class'].replace(allDoubleQuotes, emptySpace);
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}.${childClassAttrsV}')`;
                   declarations.push(varable);
                 } else if (keysOfParent.includes('class')) {
-                  let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+                  let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
                   if (parentclassAttrsV.match(/\s/g)) {
-                    let classes = parentclassAttrsV.split(' ');
+                    let classes = parentclassAttrsV.split(space);
 
-                    classes.filter(element => element != '');
+                    classes.filter(element => element != emptySpace);
 
                     parentclassAttrsV = classes[0];
                   }
 
-                  let childClassAttrsV = item.attrs['class'].replace(/"/g, '');
+                  let childClassAttrsV = item.attrs['class'].replace(allDoubleQuotes, emptySpace);
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}.${childClassAttrsV}')`;
                   declarations.push(varable);
@@ -405,13 +405,13 @@ function activate(context) {
               } else {
                 let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}.${item.attrs[
                   'class'
-                ].replace(/"/g, '')}')`;
+                ].replace(allDoubleQuotes, emptySpace)}')`;
                 declarations.push(varable);
               }
             } else {
               let varable = `${varableName} = document.querySelector('${item.tagName}.${item.attrs['class'].replace(
-                /"/g,
-                '',
+                allDoubleQuotes,
+                emptySpace,
               )}')`;
               declarations.push(varable);
             }
@@ -426,17 +426,17 @@ function activate(context) {
                 let keysOfParent = Object.keys(attrsOfParent);
 
                 if (keysOfParent.includes('id')) {
-                  let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
+                  let parentIdAttrsV = attrsOfParent['id'].replace(allDoubleQuotes, emptySpace);
 
                   let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}')`;
                   declarations.push(varable);
                 } else if (keysOfParent.includes('class')) {
-                  let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+                  let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
                   if (parentclassAttrsV.match(/\s/g)) {
-                    let classes = parentclassAttrsV.split(' ');
+                    let classes = parentclassAttrsV.split(space);
 
-                    classes.filter(element => element != '');
+                    classes.filter(element => element != emptySpace);
 
                     parentclassAttrsV = classes[0];
                   }
@@ -457,11 +457,11 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          let tabs = '';
+          let tabs = emptySpace;
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
-          if (tabs != '') {
+          if (tabs != emptySpace) {
             item.tabSize = '/' + tabs + '/';
           }
         });
@@ -492,7 +492,7 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        html = html.match(/<.+?>/g).join('');
+        html = html.match(contentBetweenAngleBrackets).join(emptySpace);
         let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
@@ -518,11 +518,11 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          let tabs = '';
+          let tabs = emptySpace;
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
-          if (tabs != '') {
+          if (tabs != emptySpace) {
             item.tabSize = '/' + tabs + '/';
           }
         });
@@ -553,7 +553,7 @@ function activate(context) {
         const document = editor.document;
         const selection = editor.selection;
         let html = document.getText(selection);
-        html = html.match(/<.+?>/g).join('');
+        html = html.match(contentBetweenAngleBrackets).join(emptySpace);
         let root = HTMLParser.parse(html);
         root.childNodes.forEach(item => {
           nesting(item, htmlObjs, 0, null);
@@ -579,11 +579,11 @@ function activate(context) {
 
         const tab = '**';
         htmlObjs.forEach(item => {
-          let tabs = '';
+          let tabs = emptySpace;
           for (let i = 0; i < item.nestingLevel; i++) {
             tabs += tab;
           }
-          if (tabs != '') {
+          if (tabs != emptySpace) {
             item.tabSize = '/' + tabs + '/';
           }
         });
@@ -738,7 +738,7 @@ function activate(context) {
         );
 
         let html = document.getText(selection);
-        html = html.match(/<.+?>/g).join('');
+        html = html.match(contentBetweenAngleBrackets).join(emptySpace);
         let root = HTMLParser.parse(html);
 
         root.childNodes.forEach(item => {
@@ -760,7 +760,7 @@ ${declare}.addEventListener("${result}", ${result}On${declare[0].toUpperCase() +
 // =====================================================\n`;
         }
 
-        ncp.copy(declarations.join('\n'), function () {
+        ncp.copy(declarations.join(newLine), function () {
           vscode.window.showInformationMessage('OK');
         });
       }

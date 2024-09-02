@@ -130,7 +130,7 @@ module.exports = function querySelectorWithEventCommand () {
     );
 
     let html = document.getText(selection);
-    html = html.match(/<.+?>/g).join('');
+    html = html.match(contentBetweenAngleBrackets).join(emptySpace);
     let root = HTMLParser.parse(html);
 
     root.childNodes.forEach(item => {
@@ -152,7 +152,7 @@ ${declare}.addEventListener("${result}", ${result}On${declare[0].toUpperCase() +
 // =====================================================\n`;
     }
 
-    ncp.copy(declarations.join('\n'), function () {
+    ncp.copy(declarations.join(newLine), function () {
       vscode.window.showInformationMessage('OK');
     });
   }

@@ -6,7 +6,7 @@ module.exports = function querySelectorWithDetailsCommand () {
     const document = editor.document;
     const selection = editor.selection;
     let html = document.getText(selection);
-    html = html.match(/<.+?>/g).join('');
+    html = html.match(contentBetweenAngleBrackets).join(emptySpace);
     let root = HTMLParser.parse(html);
     root.childNodes.forEach(item => {
       nesting(item, htmlObjs, 0, null);
@@ -23,36 +23,36 @@ module.exports = function querySelectorWithDetailsCommand () {
             let attrsOfParent = item.parentEl.attrs;
             let keysOfParent = Object.keys(attrsOfParent);
             if (keysOfParent.includes('id')) {
-              let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
-              let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+              let parentIdAttrsV = attrsOfParent['id'].replace(allDoubleQuotes, emptySpace);
+              let childIdAttrsV = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
 
               let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}#${childIdAttrsV}')`;
               declarations.push(varable);
             } else if (keysOfParent.includes('class')) {
-              let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+              let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
               if (parentclassAttrsV.match(/\s/g)) {
-                let classes = parentclassAttrsV.split(' ');
+                let classes = parentclassAttrsV.split(space);
 
-                classes.filter(element => element != '');
+                classes.filter(element => element != emptySpace);
 
                 parentclassAttrsV = classes[0];
               }
 
-              let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+              let childIdAttrsV = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
 
               let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}#${childIdAttrsV}')`;
               declarations.push(varable);
             }
           } else {
-            let childIdAttrsV = item.attrs['id'].replace(/"/g, '');
+            let childIdAttrsV = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
             let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}#${childIdAttrsV}')`;
             declarations.push(varable);
           }
         } else {
           let varable = `${varableName} = document.querySelector('${item.tagName}#${item.attrs['id'].replace(
-            /"/g,
-            '',
+            allDoubleQuotes,
+            emptySpace,
           )}')`;
           declarations.push(varable);
         }
@@ -68,23 +68,23 @@ module.exports = function querySelectorWithDetailsCommand () {
             let keysOfParent = Object.keys(attrsOfParent);
 
             if (keysOfParent.includes('id')) {
-              let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
-              let childClassAttrsV = item.attrs['class'].replace(/"/g, '');
+              let parentIdAttrsV = attrsOfParent['id'].replace(allDoubleQuotes, emptySpace);
+              let childClassAttrsV = item.attrs['class'].replace(allDoubleQuotes, emptySpace);
 
               let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}.${childClassAttrsV}')`;
               declarations.push(varable);
             } else if (keysOfParent.includes('class')) {
-              let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+              let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
               if (parentclassAttrsV.match(/\s/g)) {
-                let classes = parentclassAttrsV.split(' ');
+                let classes = parentclassAttrsV.split(space);
 
-                classes.filter(element => element != '');
+                classes.filter(element => element != emptySpace);
 
                 parentclassAttrsV = classes[0];
               }
 
-              let childClassAttrsV = item.attrs['class'].replace(/"/g, '');
+              let childClassAttrsV = item.attrs['class'].replace(allDoubleQuotes, emptySpace);
 
               let varable = `${varableName} = document.querySelector('${tagNameOfParent}.${parentclassAttrsV} ${item.tagName}.${childClassAttrsV}')`;
               declarations.push(varable);
@@ -92,13 +92,13 @@ module.exports = function querySelectorWithDetailsCommand () {
           } else {
             let varable = `${varableName} = document.querySelector('${tagNameOfParent} ${item.tagName}.${item.attrs[
               'class'
-            ].replace(/"/g, '')}')`;
+            ].replace(allDoubleQuotes, emptySpace)}')`;
             declarations.push(varable);
           }
         } else {
           let varable = `${varableName} = document.querySelector('${item.tagName}.${item.attrs['class'].replace(
-            /"/g,
-            '',
+            allDoubleQuotes,
+            emptySpace,
           )}')`;
           declarations.push(varable);
         }
@@ -113,17 +113,17 @@ module.exports = function querySelectorWithDetailsCommand () {
             let keysOfParent = Object.keys(attrsOfParent);
 
             if (keysOfParent.includes('id')) {
-              let parentIdAttrsV = attrsOfParent['id'].replace(/"/g, '');
+              let parentIdAttrsV = attrsOfParent['id'].replace(allDoubleQuotes, emptySpace);
 
               let varable = `${varableName} = document.querySelector('${tagNameOfParent}#${parentIdAttrsV} ${item.tagName}')`;
               declarations.push(varable);
             } else if (keysOfParent.includes('class')) {
-              let parentclassAttrsV = attrsOfParent['class'].replace(/"/g, '');
+              let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
               if (parentclassAttrsV.match(/\s/g)) {
-                let classes = parentclassAttrsV.split(' ');
+                let classes = parentclassAttrsV.split(space);
 
-                classes.filter(element => element != '');
+                classes.filter(element => element != emptySpace);
 
                 parentclassAttrsV = classes[0];
               }
@@ -144,11 +144,11 @@ module.exports = function querySelectorWithDetailsCommand () {
 
     const tab = '**';
     htmlObjs.forEach(item => {
-      let tabs = '';
+      let tabs = emptySpace;
       for (let i = 0; i < item.nestingLevel; i++) {
         tabs += tab;
       }
-      if (tabs != '') {
+      if (tabs != emptySpace) {
         item.tabSize = '/' + tabs + '/';
       }
     });
