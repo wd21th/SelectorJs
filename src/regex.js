@@ -4,6 +4,7 @@ const contentBetweenAngleBrackets = /<.+?>/g,
   emptySpace = '',
   space = ' ',
   hyphen = '-',
+  comma = ',',
   newLine = '\n';
 
 module.exports = {
