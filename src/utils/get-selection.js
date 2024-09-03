@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 let htmlParser = require('node-html-parser');
+const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
 
 /**
  * Get selection from editor and parse HTML
