@@ -1,17 +1,17 @@
 const createElementCommand = require('./create-element.command'),
-  querySelector = require('./query-selector.command'),
-  querySelectorBy = require('./query-selector-by.command'),
-  querySelectorAll = require('./query-selector-all.command'),
-  querySelectorAllBy = require('./query-selector-all-by.command'),
-  querySelectorWithEvent = require('./query-selector-with-event.command'),
-  querySelectorWithDetails = require('./query-selector-with-details.command');
+  querySelectorCommand = require('./query-selector.command'),
+  querySelectorByCommand = require('./query-selector-by.command'),
+  querySelectorAllCommand = require('./query-selector-all.command'),
+  querySelectorAllByCommand = require('./query-selector-all-by.command'),
+  querySelectorWithEventCommand = require('./query-selector-with-event.command'),
+  querySelectorWithDetailsCommand = require('./query-selector-with-details.command');
 
 module.exports = {
   createElementCommand,
-  querySelector,
-  querySelectorBy,
-  querySelectorAll,
-  querySelectorAllBy,
-  querySelectorWithEvent,
-  querySelectorWithDetails,
+  querySelectorCommand,
+  querySelectorByCommand,
+  querySelectorAllCommand,
+  querySelectorAllByCommand,
+  querySelectorWithEventCommand,
+  querySelectorWithDetailsCommand,
 }
