@@ -80,7 +80,7 @@ function querySelectorByCommand () {
         tabs += tab;
       }
       if (tabs != emptySpace) {
-        item.tabSize = '/' + tabs + '/';
+        item.tabSize = `/${tabs}/`;
       }
     });
 
@@ -91,7 +91,7 @@ function querySelectorByCommand () {
     if (declarations.length == 1) {
       finalString = 'const ' + declarations[0] + ';';
     } else {
-      finalString = 'const \n' + declarations.join(',\n') + ';';
+      finalString = `const ${newLine}${declarations.join(',\n')};`;
     }
 
     ncp.copy(finalString, function () {

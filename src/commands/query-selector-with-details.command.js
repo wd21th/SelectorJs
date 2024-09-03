@@ -155,7 +155,7 @@ function querySelectorWithDetailsCommand () {
         tabs += tab;
       }
       if (tabs != emptySpace) {
-        item.tabSize = '/' + tabs + '/';
+        item.tabSize = `/${tabs}/`;
       }
     });
 
@@ -165,9 +165,9 @@ function querySelectorWithDetailsCommand () {
 
     let finalString;
     if (declarations.length == 1) {
-      finalString = 'const ' + declarations.join(',\n') + ';';
+      finalString = `const ${declarations.join(',\n')};`;
     } else {
-      finalString = 'const \n' + declarations.join(',\n') + ';';
+      finalString = `const ${newLine}${declarations.join(',\n')};`;
     }
     ncp.copy(finalString, function () {
       vscode.window.showInformationMessage('OK');
