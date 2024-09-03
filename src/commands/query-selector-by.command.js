@@ -1,3 +1,7 @@
+/**
+ * Description
+ * @returns {any}
+ */
 function querySelectorByCommand () {
   let htmlObjs = [];
   let declarations = [];
