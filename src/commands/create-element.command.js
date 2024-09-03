@@ -1,3 +1,5 @@
+const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
+
 /**
  * Description
  * @returns {any}
