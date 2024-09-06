@@ -6,8 +6,8 @@ const { emptySpace } = require("../regex");
  * @param {any} arr
  * @returns {any}
  */
-function qs (item, arr) {
-  let keys = Object.keys(item.attrs);
+function qs (item) {
+  let keys = Object.keys(item.attrs), arr = [];
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
     let id = item.attrs['id'].replace(/\"/g, emptySpace);
@@ -22,6 +22,8 @@ function qs (item, arr) {
     let varable = `${item.tagName} = document.querySelector('${item.tagName}')`;
     arr.push(varable);
   }
+
+  return arr;
 }
 
 module.exports = qs;

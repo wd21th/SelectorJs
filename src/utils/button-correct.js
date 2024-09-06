@@ -7,7 +7,8 @@ const checkIdVarName = require("./check-id-var-name");
  * @param {any} arr
  * @returns {any}
  */
-function buttonCorrect (item, arr) {
+function buttonCorrect (item) {
+  let arr = [];
   let keys = Object.keys(item.attrs);
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
@@ -37,6 +38,8 @@ function buttonCorrect (item, arr) {
     let varable = `btn = document.querySelector('${item.tagName}')`;
     arr.push(varable);
   }
+
+  return arr;
 }
 
 module.exports = buttonCorrect;
