@@ -4,7 +4,7 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
  * Description
  * @returns {any}
  */
-function querySelectorByCommand () {
+async function querySelectorByCommand () {
   let htmlObjs = [];
   let declarations = [];
   const editor = vscode.window.activeTextEditor;
