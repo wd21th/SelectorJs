@@ -147,7 +147,7 @@ async function querySelectorWithEventCommand () {
     });
 
     htmlObjs.forEach(item => {
-      querySelector(item, declarations);
+      declarations = querySelector(item);
     });
 
     for (let i = 0; i < declarations.length; i++) {
