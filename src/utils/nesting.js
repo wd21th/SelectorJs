@@ -1,3 +1,7 @@
+const { htmlElement } = require("../classes");
+const { emptySpace } = require("../regex");
+const setAttributes = require("./set-attributes");
+
 /**
  * Description
  * @param {any} htmlEl
