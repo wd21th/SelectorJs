@@ -14,6 +14,7 @@ module.exports = {
   buttonAllCorrect,
   checkIdVarName,
   checkClassVarName,
+  getSelection,
   setAttributes,
   querySelector,
   querySelectorAll,
