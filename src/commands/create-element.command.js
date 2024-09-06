@@ -16,7 +16,7 @@ function createElementCommand () {
     html = html.match(contentBetweenAngleBrackets).join(emptySpace);
     let root = HTMLParser.parse(html);
     root.childNodes.forEach(item => {
-      nesting(item, htmlObjs, 0, null);
+      nesting(item);
     });
 
     let createElement = [];

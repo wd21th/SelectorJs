@@ -17,7 +17,7 @@ async function querySelectorAllByCommand () {
     html = html.match(contentBetweenAngleBrackets).join(emptySpace);
     let root = HTMLParser.parse(html);
     root.childNodes.forEach(item => {
-      nesting(item, htmlObjs, 0, null);
+      nesting(item);
     });
 
     let result = await vscode.window.showQuickPick(['id', 'class', 'name', 'tagName']);

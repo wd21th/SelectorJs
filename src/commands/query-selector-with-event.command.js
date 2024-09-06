@@ -143,7 +143,7 @@ async function querySelectorWithEventCommand () {
     let root = HTMLParser.parse(html);
 
     root.childNodes.forEach(item => {
-      nesting(item, htmlObjs, 0, null);
+      nesting(item);
     });
 
     htmlObjs.forEach(item => {
