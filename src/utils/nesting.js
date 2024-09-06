@@ -1,4 +1,4 @@
-const { htmlElement } = require("../classes");
+const { htmlElement, parentElement } = require("../classes");
 const { emptySpace } = require("../regex");
 const setAttributes = require("./set-attributes");
 
@@ -10,48 +10,29 @@ const setAttributes = require("./set-attributes");
  * @param {any} parent
  * @returns {any}
  */
-function nesting (htmlEl, arr, nestingLevel, parent) {
-  if (htmlEl.childNodes == 0) {
-    let tagName = htmlEl.rawTagName,
-      attrs = htmlEl.rawAttrs, attrsObj = {}, tabs = emptySpace;
-    if (attrs != emptySpace) {
-      setAttributes(attrs, attrsObj);
-    }
-    if (parent) {
-      let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
+function nesting (htmlEl, arr = [], nestingLevel = 0, parent = null) {
+  let tagName = htmlEl.rawTagName,
+    attrs = htmlEl.rawAttrs, attrsObj = {}, tabs = emptySpace;
 
-      arr.push(tag);
-    } else {
-      let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel);
+  if (attrs != emptySpace) {
+    setAttributes(attrs, attrsObj);
+  }
 
-      arr.push(tag);
-    }
+  if (htmlEl.childNodes.length == 0) {
+    let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
+    arr.push(tag);
+    return [...arr];
   } else {
-    let tagName = htmlEl.rawTagName,
-      attrs = htmlEl.rawAttrs, attrsObj = {}, tabs = emptySpace;
-    if (attrs != emptySpace) {
-      setAttributes(attrs, attrsObj);
-    }
-
-    if (parent) {
-      let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
-
-      arr.push(tag);
-
-      let parentEl = new parentElement(tagName, attrsObj);
-      nestingLevel++;
-      for (let i = 0; i < htmlEl.childNodes.length; i++) {
-        nesting(htmlEl.childNodes[i], arr, nestingLevel, parentEl);
-      }
-    } else {
-      let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
-      arr.push(tag);
-      let parentEl = new parentElement(tagName, attrsObj);
-      nestingLevel++;
-      for (let i = 0; i < htmlEl.childNodes.length; i++) {
-        nesting(htmlEl.childNodes[i], arr, nestingLevel, parentEl);
-      }
-    }
+    let tag = new htmlElement(tagName, tabs, attrsObj, nestingLevel, parent);
+    arr.push(tag);
+    let parentEl = new parentElement(tagName, attrsObj);
+    nestingLevel++;
+    
+    const map = htmlEl.childNodes.map((el, i) => {
+      return nesting(htmlEl.childNodes[i], [...arr], nestingLevel, parentEl);
+    })
+    
+    return map;
   }
 }
 
