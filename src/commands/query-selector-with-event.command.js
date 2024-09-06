@@ -144,7 +144,7 @@ function querySelectorWithEventCommand () {
     });
 
     htmlObjs.forEach(item => {
-      qs(item, declarations);
+      querySelector(item, declarations);
     });
 
     for (let i = 0; i < declarations.length; i++) {
