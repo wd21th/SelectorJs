@@ -8,11 +8,10 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
  * @returns {any}
  */
 function querySelectorCommand () {
-  let htmlObjs = [];
+  let htmlObjs = getSelection().childNodes.map(item => {
+    return nesting(item);
+  }).flat(Infinity);
   let declarations = [];
-  getSelection().childNodes.forEach(item => {
-    nesting(item, htmlObjs, 0, null);
-  });
 
   htmlObjs.forEach(item => {
     if (Object.keys(item.attrs).length != 0) {
