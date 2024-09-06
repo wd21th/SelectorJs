@@ -12,8 +12,8 @@ const setAttributes = require("./set-attributes");
  */
 function nesting (htmlEl, arr, nestingLevel, parent) {
   if (htmlEl.childNodes == 0) {
-    let tagName = htmlEl.rawTagName;
-    (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = emptySpace);
+    let tagName = htmlEl.rawTagName,
+      attrs = htmlEl.rawAttrs, attrsObj = {}, tabs = emptySpace;
     if (attrs != emptySpace) {
       setAttributes(attrs, attrsObj);
     }
@@ -27,8 +27,8 @@ function nesting (htmlEl, arr, nestingLevel, parent) {
       arr.push(tag);
     }
   } else {
-    let tagName = htmlEl.rawTagName;
-    (attrs = htmlEl.rawAttrs), (attrsObj = {}), (tabs = emptySpace);
+    let tagName = htmlEl.rawTagName,
+      attrs = htmlEl.rawAttrs, attrsObj = {}, tabs = emptySpace;
     if (attrs != emptySpace) {
       setAttributes(attrs, attrsObj);
     }
