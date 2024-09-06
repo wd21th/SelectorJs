@@ -1,4 +1,6 @@
-const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
+const vscode = require('vscode');
+const { emptySpace, contentBetweenAngleBrackets, newLine, allDoubleQuotes } = require('./../regex');
+const { nesting } = require('../utils');
 
 /**
  * Description

@@ -1,3 +1,6 @@
+const { allDoubleQuotes, emptySpace } = require("../regex");
+const checkIdVarName = require("./check-id-var-name");
+
 /**
  * Description
  * @param {any} item

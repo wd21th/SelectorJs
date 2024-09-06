@@ -1,3 +1,5 @@
+const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow } = require("../regex");
+
 /**
  * Description
  * @param {any} classValue

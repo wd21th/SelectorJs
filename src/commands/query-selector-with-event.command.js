@@ -1,4 +1,7 @@
+const vscode = require('vscode');
+const ncp = require('copy-paste');
 const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
+const { nesting, querySelector } = require('../utils');
 
 /**
  * Description

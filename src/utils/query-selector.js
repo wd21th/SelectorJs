@@ -1,3 +1,5 @@
+const { emptySpace } = require("../regex");
+
 /**
  * Description
  * @param {any} item

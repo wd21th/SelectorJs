@@ -1,3 +1,7 @@
+const { emptySpace } = require("../regex");
+const checkClassVarName = require("./check-class-var-name");
+const checkIdVarName = require("./check-id-var-name");
+
 /**
  * Description
  * @param {any} item
