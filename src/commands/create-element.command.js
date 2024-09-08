@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-const { emptySpace, contentBetweenAngleBrackets, newLine, allDoubleQuotes } = require('./../regex');
+const { emptySpace, contentBetweenAngleBrackets, newLine, allDoubleQuotes, space } = require('./../regex');
 const { nesting, getSelection } = require('../utils');
 
 /**
@@ -17,8 +17,8 @@ function createElementCommand () {
     createElement.push(`const ${item.tagName} = document.createElement('${item.tagName}')`);
     for (const key in item.attrs) {
       if (key == 'class') {
-        if (item.attrs[key].match(/\s/g)) {
-          let classes = item.attrs[key].replace(allDoubleQuotes, emptySpace).split(' ');
+        if (item.attrs[key].includes(space)) {
+          let classes = item.attrs[key].replace(allDoubleQuotes, emptySpace).split(space);
           for (let i = 0; i < classes.length; i++) {
             createElement.push(`${item.tagName}.classList.add("${classes[i]}")`);
           }
