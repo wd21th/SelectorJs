@@ -3,7 +3,7 @@ const { emptySpace, contentBetweenAngleBrackets, newLine, allDoubleQuotes, space
 const { nesting, getSelection } = require('../utils');
 
 /**
- * Description
+ * Generates javascript code from html
  * @returns {any}
  */
 function createElementCommand () {

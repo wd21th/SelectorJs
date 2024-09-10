@@ -4,7 +4,7 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
 const { nesting, querySelector } = require('../utils');
 
 /**
- * Description
+ * Generates querySelector commands with variables and event
  * @returns {any}
  */
 async function querySelectorWithEventCommand () {

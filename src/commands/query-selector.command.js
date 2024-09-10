@@ -4,7 +4,7 @@ const { getSelection, querySelector, buttonCorrect, nesting } = require('../util
 const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
 
 /**
- * Description
+ * Generates querySelector commands with variables
  * @returns {any}
  */
 function querySelectorCommand () {

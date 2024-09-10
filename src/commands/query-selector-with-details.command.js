@@ -4,7 +4,7 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
 const { getSelection } = require('../utils');
 
 /**
- * Description
+ * Generates detailed querySelector commands with variables
  * @returns {any}
  */
 function querySelectorWithDetailsCommand () {
