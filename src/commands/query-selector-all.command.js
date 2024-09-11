@@ -1,25 +1,24 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
 const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
-const { getSelection } = require('../utils');
+const { getSelection, nesting, buttonAllCorrect, querySelectorAll } = require('../utils');
 
 /**
  * Generates querySelectorAll commands with variables
- * @returns {any}
+ * @returns {void}
  */
 function querySelectorAllCommand () {
-  let htmlObjs = [];
   let declarations = [];
-  getSelection().childNodes.forEach(item => {
-    nesting(item);
-  });
+  let htmlObjs = getSelection().childNodes.map(item => {
+    return nesting(item);
+  }).flat(Infinity);
 
   htmlObjs.forEach(item => {
     if (Object.keys(item.attrs).length != 0) {
       if (item.tagName == 'button') {
         buttonAllCorrect(item, declarations);
       } else {
-        qsa(item, declarations);
+        querySelectorAll(item, declarations);
       }
     } else {
       if (item.tagName == 'button') {
