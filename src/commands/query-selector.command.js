@@ -5,7 +5,7 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
 
 /**
  * Generates querySelector commands with variables
- * @returns {any}
+ * @returns {void}
  */
 function querySelectorCommand () {
   let htmlObjs = getSelection().childNodes.map(item => {
