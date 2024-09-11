@@ -1,4 +1,4 @@
-const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow } = require("../regex");
+const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen } = require("../regex");
 
 /**
  * Description

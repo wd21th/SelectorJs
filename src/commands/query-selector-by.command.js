@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
+const { emptySpace, contentBetweenAngleBrackets, newLine, hyphen } = require('./../regex');
 const { getSelection } = require('../utils');
 
 /**
