@@ -15,12 +15,12 @@ function checkClassVarName (classValue) {
   }
 
   let varableName = classValue;
-  if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+  if (multipleDigitsInBeginningOfEachRow.test(varableName)) {
     const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
     varableName = varableName.substring(lengthOfDigits);
   }
 
-  if (varableName.match(/-/g)) {
+  if (varableName.includes(hyphen)) {
     varableName = varableName.split(hyphen);
 
     varableName.filter(element => element != emptySpace);

@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { emptySpace, contentBetweenAngleBrackets, newLine, hyphen } = require('./../regex');
+const { emptySpace, contentBetweenAngleBrackets, newLine, hyphen, multipleDigitsInBeginningOfEachRow } = require('./../regex');
 const { getSelection } = require('../utils');
 
 /**
@@ -20,11 +20,11 @@ async function querySelectorAllByCommand () {
     if (result == 'id') {
       if (item.attrs[result]) {
         let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
-        if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+        if (multipleDigitsInBeginningOfEachRow.test(varableName)) {
           const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
           varableName = varableName.substring(lengthOfDigits);
         }
-        if (varableName.match(/-/g)) {
+        if (varableName.includes(hyphen)) {
           varableName = varableName.split(hyphen);
           for (let j = 1; j < varableName.length; j++) {
             varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
@@ -45,12 +45,12 @@ async function querySelectorAllByCommand () {
         }
 
         let varableName = classValue;
-        if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+        if (multipleDigitsInBeginningOfEachRow.test(varableName)) {
           const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
           varableName = varableName.substring(lengthOfDigits);
         }
 
-        if (varableName.match(/-/g)) {
+        if (varableName.includes(hyphen)) {
           varableName = varableName.split(hyphen);
 
           varableName.filter(element => element != emptySpace);
@@ -67,11 +67,11 @@ async function querySelectorAllByCommand () {
     } else if (result == 'name') {
       if (item.attrs[result]) {
         let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
-        if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+        if (multipleDigitsInBeginningOfEachRow.test(varableName)) {
           const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
           varableName = varableName.substring(lengthOfDigits);
         }
-        if (varableName.match(/-/g)) {
+        if (varableName.includes(hyphen)) {
           varableName = varableName.split(hyphen);
           for (let j = 1; j < varableName.length; j++) {
             varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);

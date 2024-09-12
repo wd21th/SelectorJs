@@ -1,30 +1,30 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { emptySpace, contentBetweenAngleBrackets, newLine, hyphen } = require('./../regex');
-const { getSelection } = require('../utils');
+const { allDoubleQuotes, emptySpace, contentBetweenAngleBrackets, newLine, hyphen, multipleDigitsInBeginningOfEachRow, space } = require('./../regex');
+const { getSelection, nesting } = require('../utils');
 
 /**
  * Generates querySelector commands with variables by user's pick
- * @returns {any}
+ * @returns {void}
  */
 async function querySelectorByCommand () {
-  let htmlObjs = [];
   let declarations = [];
-  getSelection().childNodes.forEach(item => {
-    nesting(item);
-  });
+  let htmlObjs = getSelection().childNodes.map(item => {
+    return nesting(item);
+  }).flat(Infinity);
 
-  let result = await vscode.window.showQuickPick(['id', 'class', 'tagName']);
+  const selectors = ['id', 'class', 'tagName'];
+  let result = await vscode.window.showQuickPick(selectors);
 
   htmlObjs.forEach(item => {
     if (result == 'id') {
       if (item.attrs[result]) {
         let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
-        if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+        if (multipleDigitsInBeginningOfEachRow.test(varableName)) {
           const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
           varableName = varableName.substring(lengthOfDigits);
         }
-        if (varableName.match(/-/g)) {
+        if (varableName.includes(hyphen)) {
           varableName = varableName.split(hyphen);
           for (let j = 1; j < varableName.length; j++) {
             varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
@@ -39,18 +39,18 @@ async function querySelectorByCommand () {
         let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
         if (classValue.match(/\s/g)) {
-          let classes = classValue.split(' ');
+          let classes = classValue.split(space);
           classes.filter(element => element != emptySpace);
           classValue = classes[0];
         }
 
         let varableName = classValue;
-        if (varableName.match(multipleDigitsInBeginningOfEachRow)) {
+        if (multipleDigitsInBeginningOfEachRow.test(varableName)) {
           const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
           varableName = varableName.substring(lengthOfDigits);
         }
 
-        if (varableName.match(/-/g)) {
+        if (varableName.includes(hyphen)) {
           varableName = varableName.split(hyphen);
 
           varableName.filter(element => element != emptySpace);
