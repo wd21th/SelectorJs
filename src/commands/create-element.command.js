@@ -42,7 +42,7 @@ function createElementCommand () {
         );
       } else if (keys.includes('class')) {
         if (item.parentEl.attrs['class'].match(/\s/g)) {
-          let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace).split(' ')[0];
+          let fstClass = item.parentEl.attrs['class'].replace(allDoubleQuotes, emptySpace).split(space)[0];
           createElement.push(
             `document.querySelector('${item.parentEl.tagName}.${fstClass}').appendChild(${item.tagName})`,
           );

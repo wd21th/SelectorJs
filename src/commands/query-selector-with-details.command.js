@@ -34,7 +34,7 @@ function querySelectorWithDetailsCommand () {
             let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
             if (parentclassAttrsV.match(/\s/g)) {
-              let classes = parentclassAttrsV.split(' ');
+              let classes = parentclassAttrsV.split(space);
 
               classes.filter(element => element != emptySpace);
 
@@ -79,7 +79,7 @@ function querySelectorWithDetailsCommand () {
             let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
             if (parentclassAttrsV.match(/\s/g)) {
-              let classes = parentclassAttrsV.split(' ');
+              let classes = parentclassAttrsV.split(space);
 
               classes.filter(element => element != emptySpace);
 
@@ -123,7 +123,7 @@ function querySelectorWithDetailsCommand () {
             let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
             if (parentclassAttrsV.match(/\s/g)) {
-              let classes = parentclassAttrsV.split(' ');
+              let classes = parentclassAttrsV.split(space);
 
               classes.filter(element => element != emptySpace);
 

@@ -9,7 +9,7 @@ function checkClassVarName (classValue) {
   classValue = classValue.replace(allDoubleQuotes, emptySpace);
 
   if (classValue.match(/\s/g)) {
-    let classes = classValue.split(' ');
+    let classes = classValue.split(space);
     classes.filter(element => element != emptySpace);
     classValue = classes[0];
   }
