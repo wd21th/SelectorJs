@@ -7,10 +7,9 @@ const { nesting, getSelection } = require('../utils');
  * @returns {any}
  */
 function createElementCommand () {
-  let htmlObjs = [];
-  getSelection().childNodes.forEach(item => {
-    nesting(item);
-  });
+  let htmlObjs = getSelection().childNodes.map(item => {
+    return nesting(item);
+  }).flat(Infinity);
 
   let createElement = [];
   htmlObjs.forEach(item => {
@@ -62,6 +61,9 @@ function createElementCommand () {
     createElement.push('//=====================================================');
   });
 
+
+  const editor = vscode.window.activeTextEditor,
+    selection = editor.selection;
   editor.edit(editBuilder => {
     editBuilder.replace(selection, createElement.join(newLine));
   });
