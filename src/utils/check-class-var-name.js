@@ -2,8 +2,8 @@ const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen 
 
 /**
  * Description
- * @param {any} classValue
- * @returns {any}
+ * @param {string} classValue
+ * @returns {string}
  */
 function checkClassVarName (classValue) {
   classValue = classValue.replace(allDoubleQuotes, emptySpace);
