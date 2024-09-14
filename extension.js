@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
 let HTMLParser = require('node-html-parser');
-const { querySelectorCommand, querySelectorAllCommand, querySelectorByCommand, querySelectorAllByCommand } = require('./src/commands');
+const { querySelectorCommand, querySelectorAllCommand, querySelectorByCommand, querySelectorAllByCommand, createElementCommand, querySelectorWithEventCommand, querySelectorWithDetailsCommand } = require('./src/commands');
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -9,7 +9,7 @@ const { querySelectorCommand, querySelectorAllCommand, querySelectorByCommand, q
 
 function activate(context) {
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.ce', () => {}),
+    vscode.commands.registerCommand('selector-js.ce', createElementCommand),
   );
 
   context.subscriptions.push(
@@ -21,7 +21,7 @@ function activate(context) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qswd', () => {}),
+    vscode.commands.registerCommand('selector-js.qswd', querySelectorWithDetailsCommand),
   );
 
   context.subscriptions.push(
@@ -33,7 +33,7 @@ function activate(context) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qswe', () => {}),
+    vscode.commands.registerCommand('selector-js.qswe', querySelectorWithEventCommand),
   );
 }
 
