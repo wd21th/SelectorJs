@@ -5,7 +5,7 @@ const { nesting, querySelector } = require('../utils');
 
 /**
  * Generates querySelector commands with variables and event
- * @returns {any}
+ * @returns {void}
  */
 async function querySelectorWithEventCommand () {
   let htmlObjs = [];

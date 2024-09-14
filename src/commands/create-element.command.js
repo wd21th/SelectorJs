@@ -4,7 +4,7 @@ const { nesting, getSelection } = require('../utils');
 
 /**
  * Generates javascript code from html
- * @returns {any}
+ * @returns {void}
  */
 function createElementCommand () {
   let htmlObjs = getSelection().childNodes.map(item => {

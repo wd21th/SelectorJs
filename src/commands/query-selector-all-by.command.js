@@ -5,7 +5,7 @@ const { getSelection } = require('../utils');
 
 /**
  * Generates querySelectorAll commands with variables by user's pick
- * @returns {any}
+ * @returns {void}
  */
 async function querySelectorAllByCommand () {
   let htmlObjs = [];
