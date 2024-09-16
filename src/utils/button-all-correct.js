@@ -12,30 +12,30 @@ function buttonAllCorrect (item) {
   let keys = Object.keys(item.attrs);
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
-    let btnId = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
+    let buttonId = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
 
-    let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}#${btnId}')`;
+    let varable = `button${varableName}s = document.querySelectorAll('${item.tagName}#${buttonId}')`;
     arr.push(varable);
   } else if (keys.includes('type')) {
     let varableName = checkIdVarName(item.attrs['type']);
-    let btnType = item.attrs['type'];
+    let buttonType = item.attrs['type'];
 
-    let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[type="${btnType}"]')`;
+    let varable = `button${varableName}s = document.querySelectorAll('${item.tagName}[type="${buttonType}"]')`;
     arr.push(varable);
   } else if (keys.includes('value')) {
     let varableName = checkIdVarName(item.attrs['value']);
-    let btnValue = item.attrs['value'];
+    let buttonValue = item.attrs['value'];
 
-    let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[value="${btnValue}"]')`;
+    let varable = `button${varableName}s = document.querySelectorAll('${item.tagName}[value="${buttonValue}"]')`;
     arr.push(varable);
   } else if (keys.includes('name')) {
     let varableName = checkIdVarName(item.attrs['name']);
-    let btnName = item.attrs['name'];
+    let buttonName = item.attrs['name'];
 
-    let varable = `btn${varableName}s = document.querySelectorAll('${item.tagName}[name="${btnName}"]')`;
+    let varable = `button${varableName}s = document.querySelectorAll('${item.tagName}[name="${buttonName}"]')`;
     arr.push(varable);
   } else {
-    let varable = `btns = document.getElementsByTagName('${item.tagName}')`;
+    let varable = `buttons = document.getElementsByTagName('${item.tagName}')`;
     arr.push(varable);
   }
 

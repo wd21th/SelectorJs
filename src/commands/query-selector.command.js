@@ -22,7 +22,7 @@ function querySelectorCommand () {
       }
     } else {
       if (item.tagName == 'button') {
-        let varable = `btn = document.querySelector('${item.tagName}')`;
+        let varable = `button = document.querySelector('${item.tagName}')`;
         declarations.push(varable);
       } else {
         let varable = `${item.tagName} = document.querySelector('${item.tagName}')`;

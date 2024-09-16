@@ -22,7 +22,7 @@ function querySelectorAllCommand () {
       }
     } else {
       if (item.tagName == 'button') {
-        let varable = `btns = document.getElementsByTagName('${item.tagName}')`;
+        let varable = `buttons = document.getElementsByTagName('${item.tagName}')`;
         declarations.push(varable);
       } else {
         let varable = `${item.tagName}s = document.getElementsByTagName('${item.tagName}')`;
