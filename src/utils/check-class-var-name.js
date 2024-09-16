@@ -1,7 +1,7 @@
 const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen } = require("../regex");
 
 /**
- * Description
+ * Modifies html class name into javascript varable name
  * @param {string} classValue
  * @returns {string}
  */
