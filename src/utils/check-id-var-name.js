@@ -1,9 +1,9 @@
 const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen } = require("../regex");
 
 /**
- * Description
- * @param {any} idValue
- * @returns {any}
+ * Modifies html id attribute into javascript varable name
+ * @param {string} idValue
+ * @returns {string}
  */
 function checkIdVarName (idValue) {
   let varableName = idValue.replace(allDoubleQuotes, emptySpace);
@@ -20,6 +20,7 @@ function checkIdVarName (idValue) {
     }
     varableName = varableName.join(emptySpace);
   }
+
   return varableName;
 }
 
