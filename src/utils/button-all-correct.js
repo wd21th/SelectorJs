@@ -1,13 +1,14 @@
+const { htmlElement } = require("../classes");
 const { allDoubleQuotes, emptySpace } = require("../regex");
 const checkIdVarName = require("./check-id-var-name");
 
 /**
  * Description
- * @param {any} item
- * @param {any} arr
- * @returns {any}
+ * @param {htmlElement} item
+ * @returns {string[]}
  */
-function buttonAllCorrect (item, arr) {
+function buttonAllCorrect (item) {
+  const arr = [];
   let keys = Object.keys(item.attrs);
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
@@ -37,6 +38,8 @@ function buttonAllCorrect (item, arr) {
     let varable = `btns = document.getElementsByTagName('${item.tagName}')`;
     arr.push(varable);
   }
+
+  return arr;
 }
 
 module.exports = buttonAllCorrect;

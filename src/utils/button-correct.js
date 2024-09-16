@@ -1,11 +1,11 @@
+const { htmlElement } = require("../classes");
 const { allDoubleQuotes, emptySpace } = require("../regex");
 const checkIdVarName = require("./check-id-var-name");
 
 /**
  * Description
- * @param {any} item
- * @param {any} arr
- * @returns {any}
+ * @param {htmlElement} item
+ * @returns {string[]}
  */
 function buttonCorrect (item) {
   let arr = [];
