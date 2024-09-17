@@ -1,12 +1,12 @@
+const { htmlElement } = require("../classes");
 const { emptySpace } = require("../regex");
 
 /**
  * Description
- * @param {any} item
- * @param {any} arr
- * @returns {any}
+ * @param {htmlElement} item
+ * @returns {Array<string>}
  */
-function qs (item) {
+function querySelector (item) {
   let keys = Object.keys(item.attrs), arr = [];
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
@@ -26,4 +26,4 @@ function qs (item) {
   return arr;
 }
 
-module.exports = qs;
+module.exports = querySelector;

@@ -1,14 +1,15 @@
 const { htmlElement, parentElement } = require("../classes");
 const { emptySpace } = require("../regex");
 const setAttributes = require("./set-attributes");
+let htmlParser = require('node-html-parser');
 
 /**
  * Description
- * @param {any} htmlEl
- * @param {any} arr
- * @param {any} nestingLevel
- * @param {any} parent
- * @returns {any}
+ * @param {htmlParser.HTMLElement} htmlEl
+ * @param {Array<htmlElement>} arr
+ * @param {number} nestingLevel
+ * @param {parentElement} parent
+ * @returns {Array<any>}
  */
 function nesting (htmlEl, arr = [], nestingLevel = 0, parent = null) {
   let tagName = htmlEl.rawTagName,

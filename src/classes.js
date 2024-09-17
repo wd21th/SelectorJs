@@ -1,8 +1,7 @@
 /**
  * Description
- * @param {any} tagName
- * @param {any} attrsObj
- * @returns {any}
+ * @param {string} tagName
+ * @param {string} attrsObj
  */
 class parentElement {
   constructor(tagName, attrsObj) {
@@ -13,12 +12,11 @@ class parentElement {
 
 /**
  * Description
- * @param {any} tagName
- * @param {any} tabSize
+ * @param {string} tagName
+ * @param {string} tabSize
  * @param {any} attrsObj
- * @param {any} nestingLevel
- * @param {any} parentEl
- * @returns {any}
+ * @param {number} nestingLevel
+ * @param {string} parentEl
  */
 class htmlElement {
   constructor(tagName, tabSize, attrsObj, nestingLevel, parentEl) {

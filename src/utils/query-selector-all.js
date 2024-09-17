@@ -1,14 +1,16 @@
+const { htmlElement } = require("../classes");
 const { emptySpace } = require("../regex");
 const checkClassVarName = require("./check-class-var-name");
 const checkIdVarName = require("./check-id-var-name");
 
 /**
  * Description
- * @param {any} item
- * @param {any} arr
- * @returns {any}
+ * @param {htmlElement} item
+ * @returns {Array<string>}
  */
-function qsa (item, arr) {
+function querySelectorAll (item) {
+  const arr = [];
+
   let keys = Object.keys(item.attrs);
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
@@ -29,6 +31,8 @@ function qsa (item, arr) {
     let varable = `${item.tagName}s = document.getElementsByTagName('${item.tagName}')`;
     arr.push(varable);
   }
+
+  return arr;
 }
 
-module.exports = qsa;
+module.exports = querySelectorAll;
