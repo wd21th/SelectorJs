@@ -9,31 +9,31 @@ const { querySelectorCommand, querySelectorAllCommand, querySelectorByCommand, q
 
 function activate(context) {
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.ce', createElementCommand),
+    vscode.commands.registerCommand('selector-js.create-element', createElementCommand),
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qsby', querySelectorByCommand),
+    vscode.commands.registerCommand('selector-js.query-selector-by', querySelectorByCommand),
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qsaby', querySelectorAllByCommand),
+    vscode.commands.registerCommand('selector-js.query-selector-all-by', querySelectorAllByCommand),
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qswd', querySelectorWithDetailsCommand),
+    vscode.commands.registerCommand('selector-js.query-selector-with-details', querySelectorWithDetailsCommand),
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qs', querySelectorCommand),
+    vscode.commands.registerCommand('selector-js.query-selector', querySelectorCommand),
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qsa', querySelectorAllCommand),
+    vscode.commands.registerCommand('selector-js.query-selector-all', querySelectorAllCommand),
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('selector-js.qswe', querySelectorWithEventCommand),
+    vscode.commands.registerCommand('selector-js.query-selector-with-event', querySelectorWithEventCommand),
   );
 }
 

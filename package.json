@@ -31,49 +31,49 @@
 		"url": "https://github.com/wd21th/SelectorJs.git"
 	},
 	"activationEvents": [
-		"onCommand:selector-js.ce",
-		"onCommand:selector-js.qsby",
-		"onCommand:selector-js.qsaby",
-		"onCommand:selector-js.qswd",
-		"onCommand:selector-js.qs",
-		"onCommand:selector-js.qsa",
-		"onCommand:selector-js.qswe"
+		"onCommand:selector-js.create-element",
+		"onCommand:selector-js.query-selector-by",
+		"onCommand:selector-js.query-selector-all-by",
+		"onCommand:selector-js.query-selector-with-details",
+		"onCommand:selector-js.query-selector",
+		"onCommand:selector-js.query-selector-all",
+		"onCommand:selector-js.query-selector-with-event"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "selector-js.ce",
+				"command": "selector-js.create-element",
 				"category": "Selector Js",
 				"title": "Create Element (convert)"
 			},
 			{
-				"command": "selector-js.qsby",
+				"command": "selector-js.query-selector-by",
 				"category": "Selector Js",
 				"title": "Selector by ..."
 			},
 			{
-				"command": "selector-js.qsaby",
+				"command": "selector-js.query-selector-all-by",
 				"category": "Selector Js",
 				"title": "Selector all by ..."
 			},
 			{
-				"command": "selector-js.qswd",
+				"command": "selector-js.query-selector-with-details",
 				"category": "Selector Js",
 				"title": "Selector with details"
 			},
 			{
-				"command": "selector-js.qs",
+				"command": "selector-js.query-selector",
 				"category": "Selector Js",
 				"title": "Query selector"
 			},
 			{
-				"command": "selector-js.qsa",
+				"command": "selector-js.query-selector-all",
 				"category": "Selector Js",
 				"title": "Query selector all"
 			},
 			{
-				"command": "selector-js.qswe",
+				"command": "selector-js.query-selector-with-event",
 				"category": "Selector Js",
 				"title": "Selector with event"
 			}
