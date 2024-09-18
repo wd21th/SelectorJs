@@ -3,7 +3,7 @@ const { allDoubleQuotes, emptySpace } = require("../regex");
 const checkIdVarName = require("./check-id-var-name");
 
 /**
- * Description
+ * Consist varable name from button attribute, uses querySelectorAll method
  * @param {htmlElement} item
  * @returns {string[]}
  */
