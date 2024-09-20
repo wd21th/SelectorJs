@@ -4,7 +4,7 @@ const checkClassVarName = require("./check-class-var-name");
 const checkIdVarName = require("./check-id-var-name");
 
 /**
- * Description
+ * Generate variables with querySelector method
  * @param {htmlElement} item
  * @returns {Array<string>}
  */
