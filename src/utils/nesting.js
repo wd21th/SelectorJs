@@ -16,7 +16,7 @@ function nesting (htmlEl, arr = [], nestingLevel = 0, parent = null) {
     attrs = htmlEl.rawAttrs, attrsObj = {}, tabs = emptySpace;
 
   if (attrs != emptySpace) {
-    setAttributes(attrs, attrsObj);
+    attrsObj = setAttributes(attrs);
   }
 
   if (htmlEl.childNodes.length == 0) {
