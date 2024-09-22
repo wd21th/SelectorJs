@@ -1,6 +1,8 @@
+let htmlParser = require('node-html-parser');
+
 /**
- * Description
- * @param {any} attrs
+ * Gives object from rawAttributes
+ * @param { htmlParser.HTMLElement.rawAttrs } attrs
  * @returns { { [key: string]: string } }
  */
 function setAttributes (attrs) {
