@@ -14,7 +14,7 @@ class parentElement {
  * Description
  * @param {string} tagName
  * @param {string} tabSize
- * @param {any} attrsObj
+ * @param { { [key: string]: any } } attrsObj
  * @param {number} nestingLevel
  * @param {string} parentEl
  */
