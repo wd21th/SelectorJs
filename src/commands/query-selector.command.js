@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { getSelection, querySelector, buttonCorrect, nesting } = require('../utils');
+const { getSelection, querySelector, buttonCorrect, buildHtmlTree } = require('../utils');
 const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
 
 /**
@@ -9,7 +9,7 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
  */
 function querySelectorCommand () {
   let htmlObjs = getSelection().childNodes.map(item => {
-    return nesting(item);
+    return buildHtmlTree(item);
   }).flat(Infinity);
   let declarations = [];
 

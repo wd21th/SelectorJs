@@ -11,7 +11,7 @@ async function querySelectorAllByCommand () {
   let htmlObjs = [];
   let declarations = [];
   getSelection().childNodes.forEach(item => {
-    nesting(item);
+    buildHtmlTree(item);
   });
 
   let result = await vscode.window.showQuickPick(['id', 'class', 'name', 'tagName']);

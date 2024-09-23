@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
 const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
-const { getSelection, nesting, buttonAllCorrect, querySelectorAll } = require('../utils');
+const { getSelection, buildHtmlTree, buttonAllCorrect, querySelectorAll } = require('../utils');
 
 /**
  * Generates querySelectorAll commands with variables
@@ -10,7 +10,7 @@ const { getSelection, nesting, buttonAllCorrect, querySelectorAll } = require('.
 function querySelectorAllCommand () {
   let declarations = [];
   let htmlObjs = getSelection().childNodes.map(item => {
-    return nesting(item);
+    return buildHtmlTree(item);
   }).flat(Infinity);
 
   htmlObjs.forEach(item => {

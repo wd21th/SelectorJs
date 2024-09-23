@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
 const { allDoubleQuotes, emptySpace, contentBetweenAngleBrackets, newLine, hyphen, multipleDigitsInBeginningOfEachRow, space } = require('./../regex');
-const { getSelection, nesting } = require('../utils');
+const { getSelection, buildHtmlTree } = require('../utils');
 
 /**
  * Generates querySelector commands with variables by user's pick
@@ -10,7 +10,7 @@ const { getSelection, nesting } = require('../utils');
 async function querySelectorByCommand () {
   let declarations = [];
   let htmlObjs = getSelection().childNodes.map(item => {
-    return nesting(item);
+    return buildHtmlTree(item);
   }).flat(Infinity);
 
   const selectors = ['id', 'class', 'tagName'];

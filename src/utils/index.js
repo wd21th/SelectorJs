@@ -1,4 +1,4 @@
-const nesting = require('./build-html-tree'),
+const buildHtmlTree = require('./build-html-tree'),
   buttonCorrect = require('./button-correct'),
   buttonAllCorrect = require('./button-all-correct'),
   checkIdVarName = require('./check-id-var-name'),
@@ -9,7 +9,7 @@ const nesting = require('./build-html-tree'),
   querySelectorAll = require('./query-selector-all');
 
 module.exports = {
-  nesting,
+  buildHtmlTree,
   buttonCorrect,
   buttonAllCorrect,
   checkIdVarName,

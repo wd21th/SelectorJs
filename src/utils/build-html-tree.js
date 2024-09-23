@@ -11,7 +11,7 @@ let htmlParser = require('node-html-parser');
  * @param {parentElement} parent
  * @returns {Array<any>}
  */
-function nesting (htmlEl, arr = [], nestingLevel = 0, parent = null) {
+function buildHtmlTree (htmlEl, arr = [], nestingLevel = 0, parent = null) {
   let tagName = htmlEl.rawTagName,
     attrs = htmlEl.rawAttrs, attrsObj = {}, tabs = emptySpace;
 
@@ -30,11 +30,11 @@ function nesting (htmlEl, arr = [], nestingLevel = 0, parent = null) {
     nestingLevel++;
     
     const map = htmlEl.childNodes.map((el, i) => {
-      return nesting(htmlEl.childNodes[i], [...arr], nestingLevel, parentEl);
+      return buildHtmlTree(htmlEl.childNodes[i], [...arr], nestingLevel, parentEl);
     })
     
     return map;
   }
 }
 
-module.exports = nesting;
+module.exports = buildHtmlTree;

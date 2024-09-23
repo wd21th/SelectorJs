@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { emptySpace, contentBetweenAngleBrackets, newLine, allDoubleQuotes, space } = require('./../regex');
-const { nesting, getSelection } = require('../utils');
+const { buildHtmlTree, getSelection } = require('../utils');
 
 /**
  * Generates javascript code from html
@@ -8,7 +8,7 @@ const { nesting, getSelection } = require('../utils');
  */
 function createElementCommand () {
   let htmlObjs = getSelection().childNodes.map(item => {
-    return nesting(item);
+    return buildHtmlTree(item);
   }).flat(Infinity);
 
   let createElement = [];

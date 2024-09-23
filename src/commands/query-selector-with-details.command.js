@@ -11,7 +11,7 @@ function querySelectorWithDetailsCommand () {
   let htmlObjs = [];
   let declarations = [];
   getSelection().childNodes.forEach(item => {
-    nesting(item);
+    buildHtmlTree(item);
   });
 
   htmlObjs.forEach(item => {
