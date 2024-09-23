@@ -1,4 +1,4 @@
-const nesting = require('./nesting'),
+const nesting = require('./build-html-tree'),
   buttonCorrect = require('./button-correct'),
   buttonAllCorrect = require('./button-all-correct'),
   checkIdVarName = require('./check-id-var-name'),
