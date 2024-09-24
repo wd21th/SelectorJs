@@ -1,11 +1,11 @@
-const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen } = require("../regex");
+const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen } = require('../regex');
 
 /**
  * Modifies html id attribute into javascript varable name
  * @param {string} idValue
  * @returns {string}
  */
-function checkIdVarName (idValue) {
+function checkIdVarName(idValue) {
   let varableName = idValue.replace(allDoubleQuotes, emptySpace);
 
   if (multipleDigitsInBeginningOfEachRow.test(varableName)) {

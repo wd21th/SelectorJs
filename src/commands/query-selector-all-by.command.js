@@ -1,13 +1,20 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { emptySpace, contentBetweenAngleBrackets, newLine, hyphen, multipleDigitsInBeginningOfEachRow, space } = require('./../regex');
+const {
+  emptySpace,
+  contentBetweenAngleBrackets,
+  newLine,
+  hyphen,
+  multipleDigitsInBeginningOfEachRow,
+  space,
+} = require('./../regex');
 const { getSelection } = require('../utils');
 
 /**
  * Generates querySelectorAll commands with variables by user's pick
  * @returns {void}
  */
-async function querySelectorAllByCommand () {
+async function querySelectorAllByCommand() {
   let htmlObjs = [];
   let declarations = [];
   getSelection().childNodes.forEach(item => {

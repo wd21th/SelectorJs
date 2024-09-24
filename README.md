@@ -3,7 +3,9 @@
 Works as eCSSTractor. You just select html tags and run command. Then text will copy to clipboard
 
 # Usage
+
 Open any document contain HTML and do one of the following:
+
 - Press **Cmd+Shift+P** on Mac OS X or **Ctrl+Shift+P** on Windows/Linux to launch command palette and choose:
 
 Query Selector
@@ -18,7 +20,6 @@ Query selector with event
 
 ![select_with_event](https://user-images.githubusercontent.com/67710731/111893320-293d2800-8a2c-11eb-94a2-ada8041506da.gif)
 
-
 If you want you can select by ...(id, class, tagName)
 
 ![Selector by](https://user-images.githubusercontent.com/67710731/112720934-86a10f80-8f2b-11eb-8240-06f6573ced72.gif)
@@ -27,19 +28,14 @@ If you want you can select all by ...(id, class, name, tagName)
 
 ![selector all by](https://user-images.githubusercontent.com/67710731/112720986-b8b27180-8f2b-11eb-88bf-9ec02d6848d9.gif)
 
-
-Selector with detail will be select element detaized. Example: querySelector('div#some div.child') 
-
+Selector with detail will be select element detaized. Example: querySelector('div#some div.child')
 
 ![selector with details](https://user-images.githubusercontent.com/67710731/112721093-3aa29a80-8f2c-11eb-908f-6032bd6758f0.gif)
 
-
-***NEW AUTOCOMPLETITON
+\*\*\*NEW AUTOCOMPLETITON
 YOU CAN AUTOCOMPLETE CREATE ELEMENT PROCESS IN JS
 
-
 ![Create element (convert)](https://user-images.githubusercontent.com/67710731/112721128-6f165680-8f2c-11eb-80fc-252830e0ccb2.gif)
-
 
 # Install
 
@@ -71,6 +67,6 @@ Open up VS Code and input hotkey Ctrl+Shift+X. Search Selector Js. Choose and In
 - Add new function - selector all by...
 - Add new function - Create Element (conver)
 
-
 ##0.0.5
+
 - Added some features

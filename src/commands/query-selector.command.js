@@ -7,10 +7,12 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
  * Generates querySelector commands with variables
  * @returns {void}
  */
-function querySelectorCommand () {
-  let htmlObjs = getSelection().childNodes.map(item => {
-    return buildHtmlTree(item);
-  }).flat(Infinity);
+function querySelectorCommand() {
+  let htmlObjs = getSelection()
+    .childNodes.map(item => {
+      return buildHtmlTree(item);
+    })
+    .flat(Infinity);
   let declarations = [];
 
   htmlObjs.forEach(item => {

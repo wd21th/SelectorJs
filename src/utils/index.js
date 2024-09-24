@@ -18,4 +18,4 @@ module.exports = {
   setAttributes,
   querySelector,
   querySelectorAll,
-}
+};

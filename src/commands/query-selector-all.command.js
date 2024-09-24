@@ -7,11 +7,13 @@ const { getSelection, buildHtmlTree, buttonAllCorrect, querySelectorAll } = requ
  * Generates querySelectorAll commands with variables
  * @returns {void}
  */
-function querySelectorAllCommand () {
+function querySelectorAllCommand() {
   let declarations = [];
-  let htmlObjs = getSelection().childNodes.map(item => {
-    return buildHtmlTree(item);
-  }).flat(Infinity);
+  let htmlObjs = getSelection()
+    .childNodes.map(item => {
+      return buildHtmlTree(item);
+    })
+    .flat(Infinity);
 
   htmlObjs.forEach(item => {
     if (Object.keys(item.attrs).length != 0) {

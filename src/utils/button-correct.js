@@ -1,13 +1,13 @@
-const { htmlElement } = require("../classes");
-const { allDoubleQuotes, emptySpace } = require("../regex");
-const checkIdVarName = require("./check-id-var-name");
+const { htmlElement } = require('../classes');
+const { allDoubleQuotes, emptySpace } = require('../regex');
+const checkIdVarName = require('./check-id-var-name');
 
 /**
  * Consist varable name from button attribute, uses querySelector method
  * @param {htmlElement} item
  * @returns {string[]}
  */
-function buttonCorrect (item) {
+function buttonCorrect(item) {
   let arr = [];
   let keys = Object.keys(item.attrs);
   if (keys.includes('id')) {

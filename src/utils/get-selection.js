@@ -6,7 +6,7 @@ const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex
  * Get selection from editor and parse HTML
  * @returns {htmlParser.HTMLElement}
  */
-function getSelection () {
+function getSelection() {
   const editor = vscode.window.activeTextEditor,
     document = editor.document,
     selection = editor.selection;

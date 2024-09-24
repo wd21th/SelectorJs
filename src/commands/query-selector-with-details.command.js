@@ -7,7 +7,7 @@ const { getSelection } = require('../utils');
  * Generates detailed querySelector commands with variables
  * @returns {void}
  */
-function querySelectorWithDetailsCommand () {
+function querySelectorWithDetailsCommand() {
   let htmlObjs = [];
   let declarations = [];
   getSelection().childNodes.forEach(item => {
@@ -58,7 +58,6 @@ function querySelectorWithDetailsCommand () {
         )}')`;
         declarations.push(varable);
       }
-
     } else if (keys.includes('class')) {
       let varableName = checkClassVarName(item.attrs['class']);
 

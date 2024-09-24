@@ -1,17 +1,27 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { allDoubleQuotes, emptySpace, contentBetweenAngleBrackets, newLine, hyphen, multipleDigitsInBeginningOfEachRow, space } = require('./../regex');
+const {
+  allDoubleQuotes,
+  emptySpace,
+  contentBetweenAngleBrackets,
+  newLine,
+  hyphen,
+  multipleDigitsInBeginningOfEachRow,
+  space,
+} = require('./../regex');
 const { getSelection, buildHtmlTree } = require('../utils');
 
 /**
  * Generates querySelector commands with variables by user's pick
  * @returns {void}
  */
-async function querySelectorByCommand () {
+async function querySelectorByCommand() {
   let declarations = [];
-  let htmlObjs = getSelection().childNodes.map(item => {
-    return buildHtmlTree(item);
-  }).flat(Infinity);
+  let htmlObjs = getSelection()
+    .childNodes.map(item => {
+      return buildHtmlTree(item);
+    })
+    .flat(Infinity);
 
   const selectors = ['id', 'class', 'tagName'];
   let result = await vscode.window.showQuickPick(selectors);

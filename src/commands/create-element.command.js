@@ -6,10 +6,12 @@ const { buildHtmlTree, getSelection } = require('../utils');
  * Generates javascript code from html
  * @returns {void}
  */
-function createElementCommand () {
-  let htmlObjs = getSelection().childNodes.map(item => {
-    return buildHtmlTree(item);
-  }).flat(Infinity);
+function createElementCommand() {
+  let htmlObjs = getSelection()
+    .childNodes.map(item => {
+      return buildHtmlTree(item);
+    })
+    .flat(Infinity);
 
   let createElement = [];
   htmlObjs.forEach(item => {
@@ -22,7 +24,9 @@ function createElementCommand () {
             createElement.push(`${item.tagName}.classList.add("${classes[i]}")`);
           }
         } else {
-          createElement.push(`${item.tagName}.classList.add("${item.attrs[key].replace(allDoubleQuotes, emptySpace)}")`);
+          createElement.push(
+            `${item.tagName}.classList.add("${item.attrs[key].replace(allDoubleQuotes, emptySpace)}")`,
+          );
         }
       } else {
         createElement.push(`${item.tagName}.setAttribute("${key}",${item.attrs[key]})`);
@@ -60,7 +64,6 @@ function createElementCommand () {
 
     createElement.push('//=====================================================');
   });
-
 
   const editor = vscode.window.activeTextEditor,
     selection = editor.selection;

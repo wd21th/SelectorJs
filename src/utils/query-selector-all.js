@@ -1,14 +1,14 @@
-const { htmlElement } = require("../classes");
-const { emptySpace } = require("../regex");
-const checkClassVarName = require("./check-class-var-name");
-const checkIdVarName = require("./check-id-var-name");
+const { htmlElement } = require('../classes');
+const { emptySpace } = require('../regex');
+const checkClassVarName = require('./check-class-var-name');
+const checkIdVarName = require('./check-id-var-name');
 
 /**
  * Generate variables with querySelectorAll method
  * @param {htmlElement} item
  * @returns {Array<string>}
  */
-function querySelectorAll (item) {
+function querySelectorAll(item) {
   const arr = [];
 
   let keys = Object.keys(item.attrs);

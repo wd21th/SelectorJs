@@ -1,15 +1,16 @@
-const { htmlElement } = require("../classes");
-const { emptySpace } = require("../regex");
-const checkClassVarName = require("./check-class-var-name");
-const checkIdVarName = require("./check-id-var-name");
+const { htmlElement } = require('../classes');
+const { emptySpace } = require('../regex');
+const checkClassVarName = require('./check-class-var-name');
+const checkIdVarName = require('./check-id-var-name');
 
 /**
  * Generate variables with querySelector method
  * @param {htmlElement} item
  * @returns {Array<string>}
  */
-function querySelector (item) {
-  let keys = Object.keys(item.attrs), arr = [];
+function querySelector(item) {
+  let keys = Object.keys(item.attrs),
+    arr = [];
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
     let id = item.attrs['id'].replace(/\"/g, emptySpace);
