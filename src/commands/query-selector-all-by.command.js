@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { emptySpace, contentBetweenAngleBrackets, newLine, hyphen, multipleDigitsInBeginningOfEachRow } = require('./../regex');
+const { emptySpace, contentBetweenAngleBrackets, newLine, hyphen, multipleDigitsInBeginningOfEachRow, space } = require('./../regex');
 const { getSelection } = require('../utils');
 
 /**
@@ -38,7 +38,7 @@ async function querySelectorAllByCommand () {
       if (item.attrs[result]) {
         let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
-        if (classValue.match(/\s/g)) {
+        if (classValue.includes(space)) {
           let classes = classValue.split(space);
           classes.filter(element => element != emptySpace);
           classValue = classes[0];

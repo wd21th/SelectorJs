@@ -38,7 +38,7 @@ async function querySelectorByCommand () {
       if (item.attrs[result]) {
         let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
-        if (classValue.match(/\s/g)) {
+        if (classValue.includes(space)) {
           let classes = classValue.split(space);
           classes.filter(element => element != emptySpace);
           classValue = classes[0];

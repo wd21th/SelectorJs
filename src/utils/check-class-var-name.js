@@ -1,4 +1,4 @@
-const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen } = require("../regex");
+const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen, space } = require("../regex");
 
 /**
  * Modifies html class name into javascript varable name
@@ -8,7 +8,7 @@ const { allDoubleQuotes, emptySpace, multipleDigitsInBeginningOfEachRow, hyphen 
 function checkClassVarName (classValue) {
   classValue = classValue.replace(allDoubleQuotes, emptySpace);
 
-  if (classValue.match(/\s/g)) {
+  if (classValue.includes(space)) {
     let classes = classValue.split(space);
     classes.filter(element => element != emptySpace);
     classValue = classes[0];

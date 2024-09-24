@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { emptySpace, contentBetweenAngleBrackets, newLine } = require('./../regex');
+const { emptySpace, contentBetweenAngleBrackets, newLine, space } = require('./../regex');
 const { getSelection } = require('../utils');
 
 /**
@@ -33,7 +33,7 @@ function querySelectorWithDetailsCommand () {
           } else if (keysOfParent.includes('class')) {
             let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
-            if (parentclassAttrsV.match(/\s/g)) {
+            if (parentclassAttrsV.includes(space)) {
               let classes = parentclassAttrsV.split(space);
 
               classes.filter(element => element != emptySpace);
@@ -78,7 +78,7 @@ function querySelectorWithDetailsCommand () {
           } else if (keysOfParent.includes('class')) {
             let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
-            if (parentclassAttrsV.match(/\s/g)) {
+            if (parentclassAttrsV.includes(space)) {
               let classes = parentclassAttrsV.split(space);
 
               classes.filter(element => element != emptySpace);
@@ -122,7 +122,7 @@ function querySelectorWithDetailsCommand () {
           } else if (keysOfParent.includes('class')) {
             let parentclassAttrsV = attrsOfParent['class'].replace(allDoubleQuotes, emptySpace);
 
-            if (parentclassAttrsV.match(/\s/g)) {
+            if (parentclassAttrsV.includes(space)) {
               let classes = parentclassAttrsV.split(space);
 
               classes.filter(element => element != emptySpace);
