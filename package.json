@@ -1,109 +1,111 @@
 {
-	"name": "selector-js",
-	"displayName": "Selector Js",
-	"description": "transfers Html elements to JavaScript variables",
-	"version": "0.0.5",
-	"engines": {
-		"vscode": "^1.54.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"publisher": "DiasBakahbay",
-	"icon": "images/icon.JPG",
-	"author": {
-		"name": "Dias Bakashbay"
-	},
-	"keywords": [
-		"Selector",
-		"Selector JS",
-		"Snippet",
-		"Html",
-		"css",
-		"javascript",
-		"Js",
-		"autocomplete",
-		"auto",
-		"query"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/wd21th/SelectorJs.git"
-	},
-	"activationEvents": [
-		"onCommand:selector-js.create-element",
-		"onCommand:selector-js.query-selector-by",
-		"onCommand:selector-js.query-selector-all-by",
-		"onCommand:selector-js.query-selector-with-details",
-		"onCommand:selector-js.query-selector",
-		"onCommand:selector-js.query-selector-all",
-		"onCommand:selector-js.query-selector-with-event"
-	],
-	"main": "./extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "selector-js.create-element",
-				"category": "Selector Js",
-				"title": "Create Element (convert)"
-			},
-			{
-				"command": "selector-js.query-selector-by",
-				"category": "Selector Js",
-				"title": "Selector by ..."
-			},
-			{
-				"command": "selector-js.query-selector-all-by",
-				"category": "Selector Js",
-				"title": "Selector all by ..."
-			},
-			{
-				"command": "selector-js.query-selector-with-details",
-				"category": "Selector Js",
-				"title": "Selector with details"
-			},
-			{
-				"command": "selector-js.query-selector",
-				"category": "Selector Js",
-				"title": "Query selector"
-			},
-			{
-				"command": "selector-js.query-selector-all",
-				"category": "Selector Js",
-				"title": "Query selector all"
-			},
-			{
-				"command": "selector-js.query-selector-with-event",
-				"category": "Selector Js",
-				"title": "Selector with event"
-			}
-		]
-	},
-	"scripts": {
-		"lint": "eslint .",
-		"pretest": "npm run lint",
-		"test": "node ./test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.0.4",
-		"@types/node": "^12.11.7",
-		"@types/vscode": "^1.54.0",
-		"eslint": "^7.19.0",
-		"glob": "^7.1.6",
-		"js-doc": "^0.5.0",
-		"mocha": "^8.2.1",
-		"typescript": "^4.1.3",
-		"vscode-test": "^1.5.0"
-	},
-	"dependencies": {
-		"copy-paste": "^1.3.0",
-		"node-html-parser": "^3.0.4"
-	},
-	"__metadata": {
-		"id": "94a92d6d-7184-4ded-a732-c8b421c4f3e0",
-		"publisherId": "e2bc1f31-ffe9-4fdd-b653-a2cdb6b9cded",
-		"publisherDisplayName": "Dias Bakahbay",
-		"installedTimestamp": 1638017192488
-	}
+  "name": "selector-js",
+  "displayName": "Selector Js",
+  "description": "transfers Html elements to JavaScript variables",
+  "version": "0.0.5",
+  "engines": {
+    "vscode": "^1.54.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "publisher": "DiasBakahbay",
+  "icon": "images/icon.JPG",
+  "author": {
+    "name": "Dias Bakashbay"
+  },
+  "keywords": [
+    "Selector",
+    "Selector JS",
+    "Snippet",
+    "Html",
+    "css",
+    "javascript",
+    "Js",
+    "autocomplete",
+    "auto",
+    "query"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wd21th/SelectorJs.git"
+  },
+  "activationEvents": [
+    "onCommand:selector-js.create-element",
+    "onCommand:selector-js.query-selector-by",
+    "onCommand:selector-js.query-selector-all-by",
+    "onCommand:selector-js.query-selector-with-details",
+    "onCommand:selector-js.query-selector",
+    "onCommand:selector-js.query-selector-all",
+    "onCommand:selector-js.query-selector-with-event"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "selector-js.create-element",
+        "category": "Selector Js",
+        "title": "Create Element (convert)"
+      },
+      {
+        "command": "selector-js.query-selector-by",
+        "category": "Selector Js",
+        "title": "Selector by ..."
+      },
+      {
+        "command": "selector-js.query-selector-all-by",
+        "category": "Selector Js",
+        "title": "Selector all by ..."
+      },
+      {
+        "command": "selector-js.query-selector-with-details",
+        "category": "Selector Js",
+        "title": "Selector with details"
+      },
+      {
+        "command": "selector-js.query-selector",
+        "category": "Selector Js",
+        "title": "Query selector"
+      },
+      {
+        "command": "selector-js.query-selector-all",
+        "category": "Selector Js",
+        "title": "Query selector all"
+      },
+      {
+        "command": "selector-js.query-selector-with-event",
+        "category": "Selector Js",
+        "title": "Selector with event"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js",
+    "format-all-files": "prettier . --write"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.54.0",
+    "eslint": "^7.19.0",
+    "glob": "^7.1.6",
+    "js-doc": "^0.5.0",
+    "mocha": "^8.2.1",
+    "prettier": "3.3.3",
+    "typescript": "^4.1.3",
+    "vscode-test": "^1.5.0"
+  },
+  "dependencies": {
+    "copy-paste": "^1.3.0",
+    "node-html-parser": "^3.0.4"
+  },
+  "__metadata": {
+    "id": "94a92d6d-7184-4ded-a732-c8b421c4f3e0",
+    "publisherId": "e2bc1f31-ffe9-4fdd-b653-a2cdb6b9cded",
+    "publisherDisplayName": "Dias Bakahbay",
+    "installedTimestamp": 1638017192488
+  }
 }
