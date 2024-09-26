@@ -63,8 +63,6 @@ async function querySelectorByCommand() {
         if (varableName.includes(hyphen)) {
           varableName = varableName.split(hyphen);
 
-          varableName.filter(element => element != emptySpace);
-
           for (let j = 1; j < varableName.length; j++) {
             varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
           }
