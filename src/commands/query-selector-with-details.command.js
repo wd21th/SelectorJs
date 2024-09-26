@@ -8,11 +8,12 @@ const { getSelection } = require('../utils');
  * @returns {void}
  */
 function querySelectorWithDetailsCommand() {
-  let htmlObjs = [];
   let declarations = [];
-  getSelection().childNodes.forEach(item => {
-    buildHtmlTree(item);
-  });
+  let htmlObjs = getSelection()
+    .childNodes.map(item => {
+      return buildHtmlTree(item);
+    })
+    .flat(Infinity);
 
   htmlObjs.forEach(item => {
     const keys = Object.keys(item.attrs);

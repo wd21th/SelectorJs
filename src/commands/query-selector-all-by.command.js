@@ -15,11 +15,12 @@ const { getSelection } = require('../utils');
  * @returns {void}
  */
 async function querySelectorAllByCommand() {
-  let htmlObjs = [];
   let declarations = [];
-  getSelection().childNodes.forEach(item => {
-    buildHtmlTree(item);
-  });
+  let htmlObjs = getSelection()
+    .childNodes.map(item => {
+      return buildHtmlTree(item);
+    })
+    .flat(Infinity);
 
   let result = await vscode.window.showQuickPick(['id', 'class', 'name', 'tagName']);
 
