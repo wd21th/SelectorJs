@@ -109,12 +109,7 @@ async function querySelectorAllByCommand() {
     declarations[i] = htmlObjs[i].tabSize + declarations[i];
   }
 
-  let finalString;
-  if (declarations.length == 1) {
-    finalString = 'const ' + declarations[0] + ';';
-  } else {
-    finalString = `const ${newLine}${declarations.join(',\n')};`;
-  }
+let finalString = declarations.length === 1 ? `const ${declarations.join(',\n')};` : `const ${newLine}${declarations.join(',\n')};`;
 
   ncp.copy(finalString, function () {
     vscode.window.showInformationMessage('OK');
