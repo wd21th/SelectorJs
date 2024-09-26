@@ -118,6 +118,6 @@ const events = [
   'waiting',
 ]
 
-module.exports {
+module.exports = {
   events
 }

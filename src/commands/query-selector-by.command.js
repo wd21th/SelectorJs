@@ -91,7 +91,8 @@ async function querySelectorByCommand() {
   for (let i = 1; i < declarations.length; i++) {
     declarations[i] = htmlObjs[i].tabSize + declarations[i];
   }
-let finalString = declarations.length === 1 ? `const ${declarations.join(',\n')};` : `const ${newLine}${declarations.join(',\n')};`;
+  let finalString =
+    declarations.length === 1 ? `const ${declarations.join(',\n')};` : `const ${newLine}${declarations.join(',\n')};`;
 
   ncp.copy(finalString, function () {
     vscode.window.showInformationMessage('OK');

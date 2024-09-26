@@ -9,10 +9,7 @@ const { buildHtmlTree, querySelector, getSelection } = require('../utils');
  */
 async function querySelectorWithEventCommand() {
   let declarations = [];
-  let result = await vscode.window.showQuickPick(
-    events,
-    {},
-  );
+  let result = await vscode.window.showQuickPick(events, {});
 
   let htmlObjs = getSelection()
     .childNodes.map(item => {
