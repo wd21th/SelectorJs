@@ -3,6 +3,6 @@
  * @param { string } match
  * @returns { string }
  */
-const upCase = (match) = match.toUpperCase();
+const upCase = (match) => match.toUpperCase();
 
 module.exports = upCase;
