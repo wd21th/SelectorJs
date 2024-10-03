@@ -8,6 +8,8 @@ let htmlParser = require('node-html-parser');
 function setAttributes(attrs) {
   return attrs.match(/([a-zA-Z\d-_]+)(?==)/g).reduce((acc, attributeName, index) => {
     acc[attributeName] = attrs.match(/".+?"/g)[index];
+    
+    return acc;
   }, {});
 }
 
