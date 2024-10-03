@@ -3,7 +3,7 @@ const buildHtmlTree = require('./build-html-tree'),
   buttonAllCorrect = require('./button-all-correct'),
   checkIdVarName = require('./check-id-var-name'),
   checkClassVarName = require('./check-class-var-name'),
-  setAttributes = require('./set-attributes'),
+  getAttributes = require('./get-attributes'),
   getSelection = require('./get-selection'),
   querySelector = require('./query-selector'),
   querySelectorAll = require('./query-selector-all');
@@ -15,7 +15,7 @@ module.exports = {
   checkIdVarName,
   checkClassVarName,
   getSelection,
-  setAttributes,
+  getAttributes,
   querySelector,
   querySelectorAll,
 };

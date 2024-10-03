@@ -1,6 +1,6 @@
 const { htmlElement, parentElement } = require('../classes');
 const { emptySpace } = require('../regex');
-const setAttributes = require('./set-attributes');
+const getAttributes = require('./get-attributes');
 let htmlParser = require('node-html-parser');
 
 /**
@@ -22,7 +22,7 @@ function buildHtmlTree(htmlEl, arr = [], nestingLevel = 0, parent = null) {
     tabs = emptySpace;
 
   if (attrs != emptySpace) {
-    attrsObj = setAttributes(attrs);
+    attrsObj = getAttributes(attrs);
   }
 
   if (htmlEl.childNodes.length == 0) {

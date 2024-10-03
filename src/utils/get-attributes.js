@@ -5,7 +5,7 @@ let htmlParser = require('node-html-parser');
  * @param { htmlParser.HTMLElement.rawAttrs } attrs
  * @returns { { [key: string]: string } }
  */
-function setAttributes(attrs) {
+function getAttributes(attrs) {
   return attrs.match(/([a-zA-Z\d-_]+)(?==)/g).reduce((acc, attributeName, index) => {
     acc[attributeName] = attrs.match(/".+?"/g)[index];
     
@@ -13,4 +13,4 @@ function setAttributes(attrs) {
   }, {});
 }
 
-module.exports = setAttributes;
+module.exports = getAttributes;
