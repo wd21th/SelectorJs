@@ -21,7 +21,7 @@ function buildHtmlTree(htmlEl, arr = [], nestingLevel = 0, parent = null) {
     attrsObj = {},
     tabs = emptySpace;
 
-  if (attrs != emptySpace) {
+  if (attrs !== emptySpace) {
     attrsObj = getAttributes(attrs);
   }
 

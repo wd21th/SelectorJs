@@ -50,7 +50,7 @@ async function querySelectorByCommand() {
 
         if (classValue.includes(space)) {
           let classes = classValue.split(space);
-          classes.filter(element => element != emptySpace);
+          classes.filter(element => element !== emptySpace);
           classValue = classes[0];
         }
 
@@ -83,7 +83,7 @@ async function querySelectorByCommand() {
     for (let i = 0; i < item.nestingLevel; i++) {
       tabs += tab;
     }
-    if (tabs != emptySpace) {
+    if (tabs !== emptySpace) {
       item.tabSize = `/${tabs}/`;
     }
   });

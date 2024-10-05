@@ -22,7 +22,7 @@ function querySelectorWithDetailsCommand() {
       if (item.parentEl) {
         let tagNameOfParent = item.parentEl.tagName;
 
-        if (Object.keys(item.parentEl.attrs).length != 0) {
+        if (Object.keys(item.parentEl.attrs).length !== 0) {
           let attrsOfParent = item.parentEl.attrs;
           let keysOfParent = Object.keys(attrsOfParent);
           if (keysOfParent.includes('id')) {
@@ -37,7 +37,7 @@ function querySelectorWithDetailsCommand() {
             if (parentclassAttrsV.includes(space)) {
               let classes = parentclassAttrsV.split(space);
 
-              classes.filter(element => element != emptySpace);
+              classes.filter(element => element !== emptySpace);
 
               parentclassAttrsV = classes[0];
             }
@@ -65,7 +65,7 @@ function querySelectorWithDetailsCommand() {
       if (item.parentEl) {
         let tagNameOfParent = item.parentEl.tagName;
 
-        if (Object.keys(item.parentEl.attrs).length != 0) {
+        if (Object.keys(item.parentEl.attrs).length !== 0) {
           let attrsOfParent = item.parentEl.attrs;
           let keysOfParent = Object.keys(attrsOfParent);
 
@@ -81,7 +81,7 @@ function querySelectorWithDetailsCommand() {
             if (parentclassAttrsV.includes(space)) {
               let classes = parentclassAttrsV.split(space);
 
-              classes.filter(element => element != emptySpace);
+              classes.filter(element => element !== emptySpace);
 
               parentclassAttrsV = classes[0];
             }
@@ -109,7 +109,7 @@ function querySelectorWithDetailsCommand() {
 
       if (item.parentEl) {
         let tagNameOfParent = item.parentEl.tagName;
-        if (Object.keys(item.parentEl.attrs).length != 0) {
+        if (Object.keys(item.parentEl.attrs).length !== 0) {
           let attrsOfParent = item.parentEl.attrs;
 
           let keysOfParent = Object.keys(attrsOfParent);
@@ -125,7 +125,7 @@ function querySelectorWithDetailsCommand() {
             if (parentclassAttrsV.includes(space)) {
               let classes = parentclassAttrsV.split(space);
 
-              classes.filter(element => element != emptySpace);
+              classes.filter(element => element !== emptySpace);
 
               parentclassAttrsV = classes[0];
             }
@@ -150,7 +150,7 @@ function querySelectorWithDetailsCommand() {
     for (let i = 0; i < item.nestingLevel; i++) {
       tabs += tab;
     }
-    if (tabs != emptySpace) {
+    if (tabs !== emptySpace) {
       item.tabSize = `/${tabs}/`;
     }
   });

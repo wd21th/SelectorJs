@@ -10,7 +10,7 @@ function checkClassVarName(classValue) {
 
   if (classValue.includes(space)) {
     let classes = classValue.split(space);
-    classes.filter(element => element != emptySpace);
+    classes.filter(element => element !== emptySpace);
     classValue = classes[0];
   }
 
@@ -23,7 +23,7 @@ function checkClassVarName(classValue) {
   if (varableName.includes(hyphen)) {
     varableName = varableName.split(hyphen);
 
-    varableName.filter(element => element != emptySpace);
+    varableName.filter(element => element !== emptySpace);
 
     for (let j = 1; j < varableName.length; j++) {
       varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);

@@ -16,7 +16,7 @@ function querySelectorAllCommand() {
     .flat(Infinity);
 
   htmlObjs.forEach(item => {
-    if (Object.keys(item.attrs).length != 0) {
+    if (Object.keys(item.attrs).length !== 0) {
       if (item.tagName == 'button') {
         declarations = buttonAllCorrect(item, declarations);
       } else {
@@ -39,7 +39,7 @@ function querySelectorAllCommand() {
     for (let i = 0; i < item.nestingLevel; i++) {
       tabs += tab;
     }
-    if (tabs != emptySpace) {
+    if (tabs !== emptySpace) {
       item.tabSize = `/${tabs}/`;
     }
   });
