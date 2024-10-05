@@ -18,9 +18,9 @@ function querySelectorAllCommand() {
   htmlObjs.forEach(item => {
     if (Object.keys(item.attrs).length != 0) {
       if (item.tagName == 'button') {
-        buttonAllCorrect(item, declarations);
+        declarations = buttonAllCorrect(item, declarations);
       } else {
-        querySelectorAll(item, declarations);
+        declarations = querySelectorAll(item, declarations);
       }
     } else {
       if (item.tagName == 'button') {
