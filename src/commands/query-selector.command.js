@@ -33,7 +33,7 @@ function querySelectorCommand() {
     }
   });
 
-  const tab = '**';
+  const tab = '\t';
   htmlObjs.forEach(item => {
     let tabs = emptySpace;
     for (let i = 0; i < item.nestingLevel; i++) {
