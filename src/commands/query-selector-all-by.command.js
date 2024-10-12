@@ -7,8 +7,9 @@ const {
   hyphen,
   multipleDigitsInBeginningOfEachRow,
   space,
+  allDoubleQuotes,
 } = require('./../regex');
-const { getSelection } = require('../utils');
+const { getSelection, buildHtmlTree } = require('../utils');
 
 /**
  * Generates querySelectorAll commands with variables by user's pick
