@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const ncp = require('copy-paste');
 const { emptySpace, contentBetweenAngleBrackets, newLine, semicolon } = require('./../regex');
 const { buildHtmlTree, querySelector, getSelection } = require('../utils');
+const { events } = require('../constants');
 
 /**
  * Generates querySelector commands with variables and event
