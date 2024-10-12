@@ -1,13 +1,13 @@
 const vscode = require('vscode');
 const ncp = require('copy-paste');
-const { emptySpace, contentBetweenAngleBrackets, newLine, space } = require('./../regex');
-const { getSelection } = require('../utils');
+const { emptySpace, contentBetweenAngleBrackets, newLine, space, allDoubleQuotes } = require('./../regex');
+const { getSelection, buildHtmlTree, checkIdVarName, checkClassVarName } = require('../utils');
 
 /**
  * Generates detailed querySelector commands with variables
  * @returns {void}
  */
-function querySelectorWithDetailsCommand() {
+function querySelectorWithDetailsCommand () {
   let declarations = [];
   let htmlObjs = getSelection()
     .childNodes.map(item => {
