@@ -49,7 +49,7 @@ function querySelectorCommand() {
   }
 
   let finalString =
-    declarations.length === 1 ? `const ${declarations.join(',\n')};` : `const ${newLine}${declarations.join(',\n')};`;
+    'const ' + declarations.length === 1 ? `${declarations.join(',\n')};` : `${newLine}${declarations.join(',\n')};`;
 
   ncp.copy(finalString, function () {
     vscode.window.showInformationMessage('OK');
