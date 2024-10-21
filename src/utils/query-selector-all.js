@@ -15,7 +15,7 @@ function querySelectorAll(item) {
   if (keys.includes('id')) {
     let varableName = checkIdVarName(item.attrs['id']);
     let id = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
-    let varable = `${varableName}s = document.querySelectorAll('#${id}')`;
+    let varable = `${varableName}s = document.querySelector('#${id}')`;
     arr.push(varable);
   } else if (keys.includes('class')) {
     let varableName = checkClassVarName(item.attrs['class']);
