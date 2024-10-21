@@ -23,27 +23,10 @@ async function querySelectorAllByCommand() {
     })
     .flat(Infinity);
 
-  let result = await vscode.window.showQuickPick(['id', 'class', 'name', 'tagName']);
+  let result = await vscode.window.showQuickPick(['class', 'name', 'tagName']);
 
   htmlObjs.forEach(item => {
-    if (result == 'id') {
-      if (item.attrs[result]) {
-        let varableName = item.attrs[result].replace(allDoubleQuotes, emptySpace);
-        if (multipleDigitsInBeginningOfEachRow.test(varableName)) {
-          const lengthOfDigits = varableName.match(multipleDigitsInBeginningOfEachRow)[0].length;
-          varableName = varableName.substring(lengthOfDigits);
-        }
-        if (varableName.includes(hyphen)) {
-          varableName = varableName.split(hyphen);
-          for (let j = 1; j < varableName.length; j++) {
-            varableName[j] = varableName[j].charAt(0).toUpperCase() + varableName[j].substring(1);
-          }
-          varableName = varableName.join(emptySpace);
-        }
-        let varable = `${varableName}s = document.querySelector('#${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
-        declarations.push(varable);
-      }
-    } else if (result == 'class') {
+    if (result == 'class') {
       if (item.attrs[result]) {
         let classValue = item.attrs[result].replace(allDoubleQuotes, emptySpace);
 
