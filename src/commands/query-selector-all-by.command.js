@@ -40,7 +40,7 @@ async function querySelectorAllByCommand() {
           }
           varableName = varableName.join(emptySpace);
         }
-        let varable = `${varableName}s = document.querySelectorAll('#${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
+        let varable = `${varableName}s = document.querySelector('#${item.attrs[result].replace(allDoubleQuotes, emptySpace)}')`;
         declarations.push(varable);
       }
     } else if (result == 'class') {

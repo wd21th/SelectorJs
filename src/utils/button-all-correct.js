@@ -14,7 +14,7 @@ function buttonAllCorrect(item) {
     let varableName = checkIdVarName(item.attrs['id']);
     let buttonId = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
 
-    let varable = `button${varableName}s = document.querySelectorAll('${item.tagName}#${buttonId}')`;
+    let varable = `button${varableName}s = document.querySelector('${item.tagName}#${buttonId}')`;
     arr.push(varable);
   } else if (keys.includes('type')) {
     let varableName = checkIdVarName(item.attrs['type']);
