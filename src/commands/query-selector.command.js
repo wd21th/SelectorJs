@@ -20,7 +20,7 @@ function querySelectorCommand() {
       if (item.tagName == 'button') {
         declarations = buttonCorrect(item);
       } else {
-        declarations = querySelector(item);
+        declarations.push(querySelector(item));
       }
     } else {
       if (item.tagName == 'button') {
@@ -39,8 +39,9 @@ function querySelectorCommand() {
     for (let i = 0; i < item.nestingLevel; i++) {
       tabs += tab;
     }
+    
     if (tabs !== emptySpace) {
-      item.tabSize = `/${tabs}/`;
+      item.tabSize = tabs;
     }
   });
 
@@ -49,7 +50,7 @@ function querySelectorCommand() {
   }
 
   let finalString =
-    'const ' + declarations.length === 1 ? `${declarations.join(',\n')};` : `${newLine}${declarations.join(',\n')};`;
+    'const ' + (declarations.length === 1 ? `${declarations.join(',\n')};` : `${newLine}${declarations.join(',\n')};`);
 
   ncp.copy(finalString, function () {
     vscode.window.showInformationMessage('OK');
