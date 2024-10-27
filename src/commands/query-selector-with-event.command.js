@@ -19,7 +19,7 @@ async function querySelectorWithEventCommand() {
     .flat(Infinity);
 
   htmlObjs.forEach(item => {
-    declarations = querySelector(item);
+    declarations.push(querySelector(item));
   });
 
   for (let i = 0; i < declarations.length; i++) {
