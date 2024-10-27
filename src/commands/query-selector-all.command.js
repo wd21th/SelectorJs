@@ -40,7 +40,7 @@ function querySelectorAllCommand() {
       tabs += tab;
     }
     if (tabs !== emptySpace) {
-      item.tabSize = `/${tabs}/`;
+      item.tabSize = tabs;
     }
   });
 
