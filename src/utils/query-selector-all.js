@@ -11,12 +11,7 @@ const checkIdVarName = require('./check-id-var-name');
 function querySelectorAll(item) {
   let keys = Object.keys(item.attrs);
 
-  if (keys.includes('id')) {
-    let varableName = checkIdVarName(item.attrs['id']);
-    let id = item.attrs['id'].replace(allDoubleQuotes, emptySpace);
-    let varable = `${varableName}s = document.querySelector('#${id}')`;
-    return varable;
-  } else if (keys.includes('class')) {
+  if (keys.includes('class')) {
     let varableName = checkClassVarName(item.attrs['class']);
     let classV = item.attrs['class'].replace(allDoubleQuotes, emptySpace);
     let varable = `${varableName}s = document.getElementsByClassName('${classV}')`;
