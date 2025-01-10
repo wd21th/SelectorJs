@@ -2,7 +2,7 @@
   "name": "selector-js",
   "displayName": "Selector Js",
   "description": "transfers Html elements to JavaScript variables",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "engines": {
     "vscode": "^1.54.0"
   },
