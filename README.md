@@ -56,12 +56,10 @@ Open up VS Code and input hotkey Ctrl+Shift+X. Search Selector Js. Choose and In
 
 ##0.0.3
 
-- Fixed some bags
 - Add new function - Query selector with event
 
 ##0.0.4
 
-- Fixed some bags
 - Add new function - selector with details
 - Add new function - selector by ...
 - Add new function - selector all by...
@@ -69,4 +67,5 @@ Open up VS Code and input hotkey Ctrl+Shift+X. Search Selector Js. Choose and In
 
 ##0.0.5
 
-- Added some features
+##0.0.6
+
