@@ -13,8 +13,8 @@ function querySelectorAll(item) {
 
   if (keys.includes('class')) {
     let varableName = checkClassVarName(item.attrs['class']);
-    let classV = item.attrs['class'].replace(allDoubleQuotes, emptySpace);
-    let varable = `${varableName}s = document.getElementsByClassName('${classV}')`;
+    let classValue = item.attrs['class'].replace(allDoubleQuotes, emptySpace);
+    let varable = `${varableName}s = document.getElementsByClassName('${classValue}')`;
     return varable;
   } else if (keys.includes('name')) {
     let varableName = checkIdVarName(item.attrs['id']);
